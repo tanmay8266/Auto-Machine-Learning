@@ -158,7 +158,8 @@
                     </button>
                   </form>
                 </div>
-            
+            </div>
+            </div>
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -176,24 +177,21 @@
         $(document).ready(function(){
             $(".new_research_entry").hide();
             $('.toast').attr("data-autohide",false);
-        });
-        $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-            });
-        });
-        $(document).ready(function(){
-            $('#create').on('click',function(){
-                $('#front_1').hide();
-                $('.new_research_entry').show();
-                
-            });
-        });
-        $(document).ready(function(){
+
             $('#add_research').on('click',function(){
                 $('#add_research').attr('disabled',true);
                 $('.toast').toast('show');
                 $('.toast').css("z-index","1");
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+
+            $('#create').on('click',function(){
+                $('#front_1').hide();
+                $('.new_research_entry').show();
+                
             });
         });
     </script>

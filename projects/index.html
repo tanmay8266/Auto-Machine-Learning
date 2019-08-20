@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collapsible sidebar using Bootstrap 4</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!--MDbootstrap CSS CDN-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/css/mdb.min.css" rel="stylesheet">
+
+    <!-- FontAwesome CSS CDN -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+    <!--Custom CSS -->
+    <link rel="stylesheet" href="../cssstyle.css">
+    <style>
+        /*
+    DEMO STYLE
+*/
+    </style>
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <nav id="sidebar">
+            <div class="sidebar-header">
+                <h3>Research-Era</h3>
+                <strong>RE</strong>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li class="active">
+                    <a href="index.html">
+                        <i class="fas fa-home"></i>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-briefcase"></i>
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-image"></i>
+                        Portfolio
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-question"></i>
+                        FAQ
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="fas fa-paper-plane"></i>
+                        Contact
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content  -->
+        <div id="content">
+
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="container-fluid">
+
+                    <button type="button" id="sidebarCollapse" class="btn btn-info">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav ml-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="#">Logout</a>
+                            </li>
+                        </ul><!-- This code is to make the front end of the website that will be called research-era and will provide sofisticated UI and easy onclick operations to the researchers worldwide. The login-->
+                    </div>
+                </div>
+            </nav>
+            <div class="row">
+                <div class="col-sm">
+            <!-- Card -->
+<div class="card">
+
+        <!-- Card image -->
+        <img class="card-img-top" src="../project_img.jpg" alt="Card image cap">
+      
+        <!-- Card content -->
+        <div class="card-body">
+      
+          <!-- Title -->
+          <h4 class="card-title"><a>Project X</a></h4>
+          <!-- Text -->
+          <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
+          <!-- Button -->
+          <a href="#" class="btn btn-primary">Button</a>
+      
+        </div>
+      
+      </div>
+      <!-- Card -->
+    </div>
+    <div class="col-sm">
+    <div class="card">
+
+            <!-- Card image -->
+            <img class="card-img-top" src="../project_img1.jpg" alt="Card image cap">
+          
+            <!-- Card content -->
+            <div class="card-body">
+          
+              <!-- Title -->
+              <h4 class="card-title"><a>Project Y</a></h4>
+              <!-- Text -->
+              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
+              <!-- Button -->
+              <a href="#" class="btn btn-primary">Button</a>
+          
+            </div>
+          
+          </div>
+    </div>
+    <div class="col-sm">
+            <div class="card">
+
+                    <!-- Card image -->
+                    <img class="card-img-top" src="../project_img.jpg" alt="Card image cap">
+                  
+                    <!-- Card content -->
+                    <div class="card-body">
+                  
+                      <!-- Title -->
+                      <h4 class="card-title"><a>Project Z</a></h4>
+                      <!-- Text -->
+                      <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
+                      <!-- Button -->
+                      <a href="#" class="btn btn-primary">Button</a>
+                  
+                    </div>
+                  
+                  </div>
+    </div>
+    </div>
+            </div>
+        </div>
+            
+            
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!--MDbootstrap JS-->
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/js/mdb.min.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
