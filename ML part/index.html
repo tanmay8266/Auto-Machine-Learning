@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome Name</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<style type="text/css">
+    table{
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+    table, th, td{
+        border: 1px solid #cdcdcd;
+    }
+    table th, table td{
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".add-row").click(function(){
+            var age = $("#age").val();
+            var sex = $("#sex").val();
+            var cp = $("#cp").val();
+            var trestbps = $("#trestbps").val();
+            var chol = $("#chol").val();
+            var fbs = $("#fbs").val();
+            var restecg = $("#restecg").val();
+            var thalach = $("#thalach").val();
+            var exang = $("#exang").val();
+            var oldpeak = $("#oldpeak").val();
+            var slope = $("#slope").val();
+            var ca = $("#ca").val();
+            var thal = $("#thal").val();
+            var target = $("#target").val();
+            var markup = "<tr><td><input type='checkbox' name='record'></td><td>" + age + "</td><td>" + sex + "</td><td>" + cp + "</td><td>" + trestbps + "</td><td>" + chol + "</td><td>" + fbs + "</td><td>" + restecg + "</td><td>" +thalach+ "</td><td>" + exang + "</td><td>" + oldpeak + "</td><td>" + slope + "</td><td>" + ca + "</td><td>" + thal + "</td><td>" + target + "</td></tr>";
+            $("table tbody").append(markup);
+        });
+        
+        // Find and remove selected table rows
+        $(".delete-row").click(function(){
+            $("table tbody").find('input[name="record"]').each(function(){
+                if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+        $(".getbutton").click(function(event){
+        event.preventDefault();
+        var table = $("table tbody");
+        str = ""
+    table.find('tr').each(function (i) {
+        var $tds = $(this).find('td');
+            console.log($tds);
+            str += "row:"
+            for(i=1;i<$(".table thead th").length;i++){
+                str += $tds.eq(i).text()+",";
+            }
+            str = str.substring(0,str.length -1);
+            str+= ";";
+            // productId = $tds.eq(1).text();
+            // product = $tds.eq(2).text();
+            // Quantity = $tds.eq(3).text();
+        // do something with productId, product, Quantity
+        console.log(str);
+    });
+    $.ajax({url: "classification.php",data:{string:str}, success: function(result){
+      console.log(result);
+    }});
+    });
+    });
+    $(document).ready(function(){
+				$('.add-row').click(function(){				
+						/*Clear all input type="text" box*/
+						$('#form1 input[type="number"]').val('');					
+				});
+			});
+
+
+</script>
+</head>
+<body>
+    <form id="form1">
+        <input type="number" id="age" placeholder="Age">
+        <input type="number" id="sex" placeholder="1=male; 0=female">
+        <input type="number" id="cp"   title=" 1=typical angina; 2=atypical angina; 3=non-anginal pain; 4=asymptomatic" placeholder="1/2/3/4">
+        <input type="number" id="trestbps" placeholder="In mmHg">
+        <input type="number" id="chol" placeholder="In mg/dl">
+        <input type="number" id="fbs" placeholder=">120mg/dl(1=true; 0=false)">
+        <input type="number" id="restecg" placeholder="Resting Electrocardiographic Results">
+        <input type="number" id="thalach" placeholder="Maximum Heartrate Achieved">
+        <input type="number" id="exang" placeholder="(1 = yes; 0 = no)">
+        <input type="number" id="oldpeak" placeholder="ST Depression"   title="ST depression induced by exercise relative to rest" >
+        <input type="number" id="slope" placeholder="1/2/3"   title="1:Upsloping; 2:Flat; 3:Downsloping">
+        <input type="number" id="ca" placeholder="0-3"   title="number of major vessels (0-3) colored by flourosopy">
+        <input type="number" id="thal" placeholder="3/6/7"   title="3 = normal; 6 = fixed defect; 7 = reversable defect">
+        <input type="number" id="target" placeholder="0/1" title="Diagnosis of heart disease(angiographic disease status) 0: < 50% diameter narrowing; 1: > 50% diameter narrowing ">
+        <input type="button" class="add-row" value="Add Row">
+    <table class="table table-dark table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Age</th>
+                <th>Gender</th>
+                <th>Chest Pain Type</th>
+                <th>Resting BP</th>
+                <th>Serum Cholestrol</th>
+                <th>Fasting Blood Sugar</th>
+                <th>Resting Electrocardiographic Results</th>
+                <th>Maximum Heart Rate Achieved</th>
+                <th>Exercise Induced Angina</th>
+                <th>ST Depression</th>
+                <th>Slope</th>
+                <th>No.of Major Vessels</th>
+                <th>Thal</th>
+                <th>Diagonsis</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <!-- <tr>
+                
+            </tr> -->
+        </tbody>
+    </table>
+    <button type="button" class="delete-row">Delete Row</button>
+    <button type="button" class="getbutton">Submit</button>
+</form>
+</body> 
+</html>
