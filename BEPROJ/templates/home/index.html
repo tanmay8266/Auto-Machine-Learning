@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <!--Custom CSS -->
-    <link rel="stylesheet" href="cssstyle.css">
+    <link rel="stylesheet" href="{% static '/css/cssstyle.css' %}">
     <style>
         /*
     DEMO STYLE
@@ -33,7 +33,6 @@
 </head>
 
 <body>
-
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -44,7 +43,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="index.html">
+                    <a href="">
                         <i class="fas fa-home"></i>
                         Home
                     </a>
@@ -92,7 +91,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#">Logout</a>
+                                <a class="nav-link" href="logout/">Logout</a>
                             </li>
                         </ul><!-- This code is to make the front end of the website that will be called research-era and will provide sofisticated UI and easy onclick operations to the researchers worldwide. The login-->
                     </div>
@@ -100,7 +99,7 @@
             </nav>
                     <div class="toast" style="position: absolute; bottom: 0; right: 0;">
                       <div class="toast-header">
-                        <img src="RE.png" class="rounded mr-2" alt="...">
+                        <img src="{% static 'img/RE.png' %}" class="rounded mr-2" alt="...">
                         <strong class="mr-auto">Research-Era</strong>
                         <small>Just now</small>
                         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
@@ -202,12 +201,11 @@
                 
             });
             $('#go_to_proj').on('click',function() {
-                window.location.href = url+"projects/"
+                window.location.href += "projects/"
             })
             $('#projects').on('click',function() {
-                window.location.href = url+"projects/"  
-            })
-            $('#')
+                window.location.href += "projects/"  
+            });
         });
     </script>
 </body>

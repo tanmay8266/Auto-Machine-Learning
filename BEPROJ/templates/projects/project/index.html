@@ -1,4 +1,4 @@
-
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <!--Custom CSS -->
-    <link rel="stylesheet" href="../../cssstyle.css">
+    <link rel="stylesheet" href="{%static 'css/cssstyle.css' %}">
     <style>
         /*
     DEMO STYLE
@@ -44,7 +44,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="../index.html">
+                    <a href="../../">
                         <i class="fas fa-home"></i>
                         Home
                     </a>
@@ -92,7 +92,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#">Logout</a>
+                                <a class="nav-link" href="logout/">Logout</a>
                             </li>
                         </ul><!-- This code is to make the front end of the website that will be called research-era and will provide sofisticated UI and easy onclick operations to the researchers worldwide. The login-->
                     </div>
@@ -100,15 +100,59 @@
             </nav>
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">
-                  <h2 class="display-4">Project Name</h2>
-                  <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+                  <h4 class="display-4">Project Name</h4>
                 </div>
               </div>
+              <div class="card">
+  <div class="card-body">
+        <h4> Progress</h4>
+        <div class="progress md-progress" style="height: 20px">
+    <div class="progress-bar" role="progressbar" style="width: 25%; height: 20px" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+</div>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+        <h4> Files</h4>
+        <table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Sr. No</th>
+      <th scope="col">File name</th>
+      <th scope="col">Date</th>
+      <th scope="col">Specifications</th>
+      <th scope="col">Remarks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>Paper</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>Thesis</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td colspan="2">Larry the Bird</td>
+      <td>Spreadsheet</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+              
     </div>
             </div>
-        </div>
-            
-            
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
