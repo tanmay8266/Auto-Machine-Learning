@@ -1,4 +1,4 @@
-
+{%load static%}
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <!--Custom CSS -->
-    <link rel="stylesheet" href="../cssstyle.css">
+    <link rel="stylesheet" href="{% static '/css/cssstyle.css' %}">
     <style>
         /*
     DEMO STYLE
@@ -33,7 +33,6 @@
 </head>
 
 <body>
-
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -44,7 +43,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="../index.html">
+                    <a href="../">
                         <i class="fas fa-home"></i>
                         Home
                     </a>
@@ -92,7 +91,7 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
-                                <a class="nav-link" href="#">Logout</a>
+                                <a class="nav-link" href="logout/">Logout</a>
                             </li>
                         </ul><!-- This code is to make the front end of the website that will be called research-era and will provide sofisticated UI and easy onclick operations to the researchers worldwide. The login-->
                     </div>
@@ -104,7 +103,7 @@
 <div class="card">
 
         <!-- Card image -->
-        <img class="card-img-top" src="../project_img.jpg" alt="Card image cap">
+        <img class="card-img-top" src="{%static 'img/project_img.jpg'%}" alt="Card image cap">
       
         <!-- Card content -->
         <div class="card-body">
@@ -122,44 +121,8 @@
       <!-- Card -->
     </div>
     <div class="col-sm">
-    <div class="card">
-
-            <!-- Card image -->
-            <img class="card-img-top" src="../project_img1.jpg" alt="Card image cap">
-          
-            <!-- Card content -->
-            <div class="card-body">
-          
-              <!-- Title -->
-              <h4 class="card-title"><a>Project Y</a></h4>
-              <!-- Text -->
-              <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
-              <!-- Button -->
-              <a href="#" id="proj_2" class="btn btn-warning openbtn">Open</a>
-          
-            </div>
-          
-          </div>
     </div>
     <div class="col-sm">
-            <div class="card">
-
-                    <!-- Card image -->
-                    <img class="card-img-top" src="../project_img.jpg" alt="Card image cap">
-                  
-                    <!-- Card content -->
-                    <div class="card-body">
-                  
-                      <!-- Title -->
-                      <h4 class="card-title"><a>Project Z</a></h4>
-                      <!-- Text -->
-                      <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
-                      <!-- Button -->
-                      <a href="#" id="proj_3" class="btn btn-warning openbtn">Open</a>
-                  
-                    </div>
-                  
-                  </div>
     </div>
     </div>
             </div>
@@ -185,8 +148,8 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-            $('.openbtn').on('click',function(){
-                window.location.href = url+'project/'
+            $('.openbtn').on('click', function(){
+                window.location.href = url + "project/"
             });
         });
     </script>

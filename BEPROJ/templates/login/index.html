@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>index</title>
+    <link rel="stylesheet" href="{%static '/bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{%static '/fonts/ionicons.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Aguafina+Script">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arizonia">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Bangers">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="{%static '/css/Login-Form-Dark-1.css' %}">
+    <link rel="stylesheet" href="{%static '/css/Login-Form-Dark.css' %}">
+    <link rel="stylesheet" href="{%static '/css/styles.css' %}">
+</head>
+
+<body>
+    <div class="login-dark">
+        <h4 class="display-4 text-center text-primary pulse animated" style="filter: grayscale(57%);margin: 0px;margin-top: 0px;padding-top: 117px;font-family: 'Aguafina Script', cursive;">Researchera</h4>
+        <form method="post" action="" style="padding-top: 50px;padding-bottom: 76px;padding-right: 50px;width: 417px;">
+            {% csrf_token %}
+            <h2 class="sr-only">Login Form</h2>
+            <div class="illustration"><i class="icon ion-ios-locked-outline" data-bs-hover-animate="flash"></i></div>
+            <div class="form-group"><input class="form-control" type="email" name="email" placeholder="Email"></div>
+            <div class="form-group"><input class="form-control" type="password" name="password" placeholder="Password"></div>
+            <div class="form-group"><button class="btn btn-primary btn-block" type="submit">Log In</button></div><button class="btn btn-primary text-center reg" type="button" style="padding-right: 11px;margin-top: 14px;margin-right: 0px;margin-left: 0px;width: 220px;background-color: rgb(70,167,24);">Register</button></form>
+    </div>
+    <script src="{%static 'js/jquery.min.js' %}"></script>
+    <script src="{%static '/bootstrap/js/bootstrap.min.js'%}"></script>
+    <script src="{%static '/js/bs-animation.js'%}"></script>
+    <script>
+        $(document).ready(function(){
+            $(".reg").on('click',function(){
+                window.location.href += "register/"
+            });
+        });
+    </script>
+</body>
+
+</html>
