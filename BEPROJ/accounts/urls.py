@@ -3,5 +3,5 @@ from . import views
 urlpatterns = [
     path('',views.login,name = "index"),
     path('register/',views.register, name = "index"),
-    path('home/',include("researchera.urls"))
+    path('home/',include("researchera.urls")),
 ]
