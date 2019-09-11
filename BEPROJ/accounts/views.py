@@ -14,9 +14,9 @@ def register(request):
         user = User.objects.create_user(password=password,username=email,first_name=first_name,last_name=last_name)
         user.save()
         print("User Created")
-        return redirect("/")
+        return redirect("/login/")
     else:
-        return render(request, "register/index.html")
+        return render(request,"register/index.html")
 def login(request):
     next = ""
     if request.GET:
@@ -34,7 +34,7 @@ def login(request):
                 return redirect(next)
         else:
             messages.info(request,'invalid credentials')
-            return redirect("")
+            return render(request,"login/index.html",{"alert":"invalid credentials"})
     else:
         if request.user.is_authenticated:
             return redirect("/home/")

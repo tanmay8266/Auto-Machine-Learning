@@ -36,6 +36,9 @@
             $(".reg").on('click',function(){
                 window.location.href += "register/"
             });
+            if('{{alert}}'== "invalid credentials"){
+            alert('{{alert}}');
+            }
         });
     </script>
 </body>

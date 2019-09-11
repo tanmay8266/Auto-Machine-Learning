@@ -112,7 +112,7 @@
                     </div>
             <div id="front_1">
                 <div class = "jumbotron">
-                    <h2>Welcome Researcher</h2>
+                    <h2>Welcome {{name}}</h2>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                 </div>
                 <div class="line"></div>
@@ -122,35 +122,17 @@
             </div>
             <!-- New Research Start Form-->
             <div class="new_research_entry">
-                <form>
+                <form id= "go">
+                    {%  csrf_token %}
                     <div class="form-group">
                       <label for="exampleFormControlInput1">Name of Research</label>
-                      <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="">
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleFormControlSelect1">Number of Researchers</label>
-                      <select class="form-control" id="exampleFormControlSelect1">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                            <label for="exampleFormControlInput1">Email Address</label>
-                            <div class="input-group mb-3">
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="">
-                                <div class="input-group-append">
-                                        <span class="input-group-text" id="basic-addon2">@gmail.com</span>
-                                </div>
-                            </div>
+                      <input type="text" class="form-control" name="nor" id="exampleFormControlInput1" placeholder="">
                     </div>
                     <div class="form-group">
                       <label for="exampleFormControlTextarea1">Initial Pitch Of Research</label>
-                      <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                      <textarea class="form-control" name="ini_pitch" id="exampleFormControlTextarea1" rows="3"></textarea>
                     </div>
-                    <button type="button" class="btn btn-success" id="add_research">Add</button>
+                    <button type="submit" class="btn btn-success" id="add_research">Add</button>
                     <button type="button" class="btn btn-warning" id="go_to_proj">
                             <i class="fas fa-arrow-circle-right" aria-hidden="true"></i>
                         Projects
@@ -184,12 +166,26 @@
         $(document).ready(function(){
             $(".new_research_entry").hide();
             $('.toast').attr("data-autohide",false);
-
-            $('#add_research').on('click',function(){
+            $('form#go').submit(function(e){
+                e.preventDefault();
+                $.post('', $(this).serialize(),function(data){
+                    if(data['status']=='ok'){
+                        $('#add_research').attr('disabled',true);
+                        $('.toast').toast('show');
+                        $('.toast').css("z-index","1");
+                    }
+                    else{
+                        alert("Try again");
+                    }
+                });
+                
+              });
+            /*$('#add_research').on('click',function(){
+                $('')
                 $('#add_research').attr('disabled',true);
                 $('.toast').toast('show');
                 $('.toast').css("z-index","1");
-            });
+            });*/
 
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');

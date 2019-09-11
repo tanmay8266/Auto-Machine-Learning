@@ -98,9 +98,12 @@
                 </div>
             </nav>
             <div class="row">
-                <div class="col-sm">
+            {% for proj in projects %}
+            <div class="col-sm">
+                    <form action="" method="POST">
+                        {% csrf_token %}
             <!-- Card -->
-<div class="card">
+        <div class="card">
 
         <!-- Card image -->
         <img class="card-img-top" src="{%static 'img/project_img.jpg'%}" alt="Card image cap">
@@ -109,23 +112,22 @@
         <div class="card-body">
       
           <!-- Title -->
-          <h4 class="card-title"><a>Project X</a></h4>
+          <h4 class="card-title"><a>{{proj.name}}</a></h4>
           <!-- Text -->
-          <p class="card-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus molestias possimus impedit illum enim ducimus laborum fugiat, tenetur sit a. Impedit obcaecati nemo sint exercitationem! In perferendis iste magnam dolores!</p>
+          <p class="card-text">{{proj.ini_pitch}}</p>
           <!-- Button -->
-          <a href="#" id="proj_1" class="btn btn-warning openbtn">Open</a>
+          <button href="#"  class="btn btn-warning openbtn">Open</button>
+          <input type="hidden" value="{{proj.id}}" name="proj_id">
       
         </div>
       
       </div>
       <!-- Card -->
+      </form>
     </div>
-    <div class="col-sm">
-    </div>
-    <div class="col-sm">
-    </div>
-    </div>
+    {% endfor %}
             </div>
+        </div>
         </div>
             
             
@@ -148,10 +150,7 @@
             $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-            $('.openbtn').on('click', function(){
-                window.location.href = url + "project/"
-            });
-        });
+                    });
     </script>
 </body>
 
