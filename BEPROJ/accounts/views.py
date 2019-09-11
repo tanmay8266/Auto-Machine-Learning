@@ -34,7 +34,7 @@ def login(request):
                 return redirect(next)
         else:
             messages.info(request,'invalid credentials')
-            return redirect("")
+            return render(request,"login/index.html",{"alert":"invalid credentials"})
     else:
         if request.user.is_authenticated:
             return redirect("/home/")

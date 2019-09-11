@@ -4,7 +4,14 @@ from django.db import models
 
 class Research(models.Model):
     name = models.CharField( max_length=50)
-    no_of_researchers =  models.IntegerField()
-    email =  models.EmailField(max_length=254)
     ini_pitch = models.TextField()
-    researcher_id = models.IntegerField()
+    re_id = models.IntegerField()
+class Files(models.Model):
+    name = models.CharField(max_length=50)
+    date = models.DateField()
+    specifications = models.CharField(max_length = 50)
+    link = models.FileField(upload_to='media')
+    remarks = models.TextField()
+    re_id = models.IntegerField()
+    pro_id = models.IntegerField()
+

@@ -95,11 +95,12 @@
             str2 = str2.substring(0,str2.length -1);
             console.log(str2);
 
-            $.ajax({url: "classification.php",data:{string:str,input:str2}, success: function(result){
-      console.log(result);
-            }
-        });
+            
     });
+    $.ajax({url: "classification.php",data:{string:str,input:str2}, success: function(result){
+        console.log(result);
+    }
+});
     });
 
     // then later

@@ -10,6 +10,7 @@
   width: 90%;
   background-color: #1e2833;
   padding: 40px;
+  padding-bottom: 0px;
   border-radius: 4px;
   transform: translate(-50%, -50%);
   position: absolute;
