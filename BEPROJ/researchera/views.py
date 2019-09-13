@@ -68,6 +68,45 @@ def project(request):
         # fs = FileSystemStorage()
         # fs.save(uploaded_file.name,uploaded_file)
 @login_required
+def relevant(request):
+    proj_id = request.session['proj_id']
+    project = Research.objects.filter(id=request.session['proj_id'])
+    stop_words = set(stopwords.words('english'))
+    stop_words.add('the')
+    pitch = project.values('ini_pitch')[0]['ini_pitch']
+    print(pitch)
+    word_tokens = word_tokenize(pitch) 
+    filtered = [w for w in word_tokens if not w in stop_words] 
+    filtered = [] 
+    for w in word_tokens: 
+        if w not in stop_words: 
+            filtered.append(w)
+    string = ""
+    for word in filtered:
+        try:
+            val = int(word)
+            string = string[0:len(string)-1] + word
+        except ValueError:
+            string = string + word + "%20%"
+    query = string[0:len(string)-4]
+    url = 'https://scholar.google.com/scholar?hl=en&as_sdt=0%2C5&q='+query+'&btnG='
+    content = requests.get(url).text
+    page = BeautifulSoup(content, 'lxml')
+    results = []
+    i=0
+    for entry in page.find_all("div",class_="gs_ri"):
+        i+=1
+        abst = entry.find('div',attrs={'class':'gs_rs'})
+        auth = entry.find('div',attrs={'class':'gs_a'})
+        divfl = entry.find('div',attrs={'class':'gs_fl'})
+        try:
+            results.append({"title": entry.a.text, "url": entry.a['href'],"abstract": abst.text,'author':auth.text,'cited':divfl.find_all('a')[2].text})
+        except:
+            pass
+        if(i==5):
+            break
+    return(render(request,'projects/project/relevant/index.html',{'results':results}))
+@login_required
 def logout(request):
     auth.logout(request)
     return redirect("/login/")

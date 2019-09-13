@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/',views.logout,name = "index"),
     path('projects/logout/',views.logout,name = "index"),
     path('projects/project/logout/',views.logout,name  = "index"),
+    path('projects/project/relevant',views.relevant,name="relevant")
 ]
 

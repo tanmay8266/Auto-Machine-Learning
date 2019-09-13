@@ -99,7 +99,7 @@
             </nav>
             <div class="row">
             {% for proj in projects %}
-            <div class="col-sm">
+            <div class="col-sm-4">
                     <form action="" method="POST">
                         {% csrf_token %}
             <!-- Card -->
@@ -125,8 +125,14 @@
       <!-- Card -->
       </form>
     </div>
+    {% if forloop.last %}
+    </div>
+    {% else %}
+        {% if forloop.counter|divisibleby:"3" %}
+        </div><div class="row">
+        {% endif %}
+    {% endif %}
     {% endfor %}
-            </div>
         </div>
         </div>
             

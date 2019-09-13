@@ -21,12 +21,9 @@
     <!--Custom CSS -->
     <link rel="stylesheet" href="{%static 'css/cssstyle.css' %}">
     <style>
-    .loader{
-    position: fixed;
-left: 50%;
-top: 50%;
-z-index: 9999;
-}
+        /*
+    DEMO STYLE
+*/
     </style>
 
     <!-- Font Awesome JS -->
@@ -36,10 +33,7 @@ z-index: 9999;
 </head>
 
 <body>
-        <div id="overlay">
-                <img class="loader" src="{% static 'img/sliding_square_loader_view.gif' %}" alt="Loading" />
-                Loading...
-           </div>
+
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -95,7 +89,7 @@ z-index: 9999;
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
-                    <button class="btn btn-dark back" ><i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Projects</button>
+                    <button type="button" class="btn btn-dark project"><i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Back to project</button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
@@ -105,92 +99,17 @@ z-index: 9999;
                     </div>
                 </div>
             </nav>
-            <div class="toast" style="position: absolute; bottom: 0; right: 0;">
-                    <div class="toast-header">
-                      <img src="{% static 'img/RE.png' %}" class="rounded mr-2" alt="...">
-                      <strong class="mr-auto">Research-Era</strong>
-                      <small>Just now</small>
-                      <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="toast-body">
-                      The new file has been added successfully!
-                    </div>
-                  </div>
-            <!-- {% if uploaded %}
-                <script>
-                        $(document).ready(function () {
-                        $('.toast').toast('show');
-                        $('.toast').css("z-index","1");
-                        });
-                </script>
-            {% endif %} -->
-            {% for proj in project%}
-            <div class="jumbotron jumbotron-fluid">
-                <div class="container">
-                <div class="row">
-                    <div class="col-6">
-                  <h1 class="display-5">{{proj.name}}</h1>
-                  </div>
-                  <div class="col-6">
-                  <button class="btn peach-gradient relevant " style="position:absolute;right:0">See Relevant Papers</button>
-                </div>
-                  </div>
-                  <div class="row">
-                      <div class = "col-sm-8" style="word-wrap: break-word;">
-                        <h4>{{proj.ini_pitch}}</h4>
-                      </div>
-                      <div class = "col-sm-4">
-                  <button class="btn blue-gradient mlzone " style="position:absolute;right:0">ML Zone</button>
-                </div>
-                </div>
-                <br>    
-        <h5> Progress</h5>
-        <div class="progress md-progress" style="height: 20px">
-    <div class="progress-bar" role="progressbar" style="width: 25%; height: 20px" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-</div>
-</div>
-</div>
-<form  method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-<div class="form-group">
-Upload a file: <input type="file" name="document" id= "upload" name="file" required> </div>
-<div class="form-group"><input class="form-control" type="text" name="remarks" placeholder="Remarks"></div>
-<div class="form-group"><input type="hidden" value="upload" name="upload"   ></div>
-<div class="form-group"><input type="hidden" value="{{proj.id}}" name="proj_id"></div>
-<div class="form-group"><button type="button" onclick="submitForm()" class="btn btn-warning uploadbtn">Upload</button></div>
-</form>
-<div class="card files">
-  <div class="card-body">
-        <h4> Files</h4>
-        <table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Sr. No</th>
-      <th scope="col">File name</th>
-      <th scope="col">Date</th>
-      <th scope="col">Specifications</th>
-      <th scope="col">Remarks</th>
-    </tr>
-  </thead>
-  <tbody>
-      {% for file in files %}
-    <tr>
-      <th scope="row">
-          <a href="{{file.link.url}}" class="btn btn-primary btn-sm" target="_blank">Download .{{file.specifications}}</a>
-      </th>
-      <td>{{file.name}}</td>
-      <td>{{file.date}}</td>
-      <td>{{file.specifications}}</td>
-      <td>{{file.remarks}}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-  </div>
-</div>
-{% endfor %}
+            {% for rel in results %}
+            <div class="jumbotron">
+                    <h2 class="display-4">{{rel.title}}</h2>
+                    <p class="lead">{{rel.abstract}}</p>
+                    <hr class="my-4">
+                    <p>{{rel.author}}</p>
+                    <p>{{rel.cited}}</p>
+                    <a class="btn btn-primary btn-lg" href="{{rel.url}}" role="button">Learn more</a>
+            </div>
+            {% endfor %}
+            
               
     </div>
             </div>
@@ -213,41 +132,11 @@ Upload a file: <input type="file" name="document" id= "upload" name="file" requi
         $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-        $(".uploadbtn").attr('disabled',true);
-        $('.files').css({"overflow": "scroll"});
-        $('#upload').on('change', function(){
-            if($('#upload').val()){
-            $(".uploadbtn").attr('disabled',false);
-            }
-        });
-        $('.uploadbtn').on('click',function(e){
-            e.preventDefault();
-            var frm = document.getElementsByTagName('form')[0];
-            frm.submit(); // Submit the form
-            frm.reset();  // Reset all form data
-            return false; // Prevent page refresh
-        });
+        $('.project').on('click',function(){
+                window.location.href = "/home/projects/project";
+            });
         
-        $('.toast').attr("data-delay",5000);
-        if("{{uploaded}}" == '1'){
-            $('.toast').toast('show');
-            $('.toast').css("z-index","1");
-        }
-        $('.back').on('click',function(){
-            window.location.href = "/home/projects";
-        });
-        $('.relevant').on('click',function(){
-            window.location.href = "/home/projects/project/relevant"
-            $('#overlay').show();
-        });
-        $('.mlzone').on('click',function(){
-            window.location.href = "/mlzone"
-        });
-        $(function(){
-            // PAGE IS FULLY LOADED  
-            // FADE OUT YOUR OVERLAYING DIV
-            $('#overlay').fadeOut();
-         });
+
     });
     </script>
 </body>

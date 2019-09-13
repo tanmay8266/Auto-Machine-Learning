@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'ml.apps.MlConfig',
     'researchera.apps.ResearcheraConfig',
     'django.contrib.admin',
     'django.contrib.auth',
