@@ -13,6 +13,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 # Create your views here.
 from django.contrib.auth.decorators import login_required
+
  
 @login_required
 def index(request):

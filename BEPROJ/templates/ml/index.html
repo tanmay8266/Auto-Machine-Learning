@@ -3,56 +3,93 @@
 <html>
 
 <head>
-	<meta charset='UTF-8'>
-	
-    <title>ML Zone</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!--MDbootstrap CSS CDN-->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/css/mdb.min.css" rel="stylesheet">
-
-    <!-- FontAwesome CSS CDN -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
-
-    <!--Custom CSS -->
-    <link rel="stylesheet" href="{%static 'css/cssstyle.css' %}">
-	<script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
-	<style>
-            .loader{
-                position: fixed;
-            left: 50%;
-            top: 50%;
-            z-index: 9999;
-            }
-	</style>	
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="{%static 'assets/bootstrap/css/bootstrap1.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="{%static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
 </head>
 
-<body>
-        <div id="overlay">
-                <img class="loader" src="{% static 'img/sliding_square_loader_view.gif' %}" alt="Loading" />
-                Loading...
-           </div>
-        
-		
-	
-        
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-        <!-- Popper.JS -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <!-- Bootstrap JS -->
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <!--MDbootstrap JS-->
-        
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.8/js/mdb.min.js"></script>
-        <script>
-                $(function(){
-                    // PAGE IS FULLY LOADED  
-                    // FADE OUT YOUR OVERLAYING DIV
-                    $('#overlay').fadeOut();
-                 });
-        </script>
+<body id="page-top"><a class="menu-toggle rounded" href="#"><i class="fa fa-bars"></i></a>
+    <nav class="navbar navbar-light navbar-expand" id="sidebar-wrapper">
+        <div class="container"><button data-toggle="collapse" class="navbar-toggler d-none" data-target="#"></button>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav sidebar-nav" id="sidebar-nav">
+                    <li class="nav-item sidebar-brand" role="presentation"><a class="nav-link active js-scroll-trigger" href="#page-top">Researchera</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="/home/">Home</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="d-flex masthead" style="background-image:url('{%static 'assets/img/bg-masthead.jpg' %}');">
+        <div class="container my-auto text-center" style="padding-bottom: 0px;">
+            <h1 class="text-center mb-1" style="font-family: 'Source Sans Pro', sans-serif;">&nbsp; ML ZONE<i class="fa fa-magic wobble animated"></i></h1>
+            <h1 class="text-center"><i class="fas fa-flask jello animated infinite"></i></h1>
+            <h3 class="mb-5"></h3><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="#about" style="margin-top: -38px;">Find Out More</a>
+            <div class="overlay" style="padding-bottom: 7px;margin-top: 11px;"><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="ml" style="margin-top: 10px;">Get Started!</a></div>
+        </div>
+    </header>
+    <section id="about" class="content-section bg-light">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-lg-10 mx-auto" data-bs-hover-animate="swing">
+                    <h2 class="shadow" style="filter: blur(0px) grayscale(0%) hue-rotate(0deg) invert(0%) sepia(0%);color: rgb(47,49,51);opacity: 1;">Speed up!&nbsp;<i class="fas fa-bolt" data-aos="slide-up"></i></h2>
+                    <p class="lead mb-5"><span>Get instant results with the advent of snappy UI&nbsp;</span></p><a class="btn btn-dark btn-xl js-scroll-trigger" role="button" href="#services">What We Offer</a></div>
+            </div>
+        </div>
+    </section>
+    <section id="services" class="content-section bg-primary text-white text-center">
+        <div class="container">
+            <div class="content-section-heading">
+                <h3 class="text-secondary mb-0">Services</h3>
+                <h2 class="mb-5">What We Offer</h2>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0"><span class="mx-auto service-icon rounded-circle mb-3" data-aos="flip-right"><i class="icon-eye"></i></span>
+                    <h4><strong>E D A</strong></h4>
+                    <p class="mb-0 text-faded">Exploratory Data Analysis</p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0"><span class="mx-auto service-icon rounded-circle mb-3" data-aos="flip-left"><i class="icon-grid"></i></span>
+                    <h4><strong>Classification</strong></h4>
+                    <p class="mb-0 text-faded">Classification on your Data</p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0"><span class="mx-auto service-icon rounded-circle mb-3" data-aos="flip-right"><i class="icon-graph"></i></span>
+                    <h4><strong>Regression</strong></h4>
+                    <p class="mb-0 text-faded"><span>Analyze the relationships between variables with us &nbsp;</span><i class="fa fa-cog"></i></p>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-5 mb-lg-0"><span class="mx-auto service-icon rounded-circle mb-3" data-aos="flip-left"><i class="icon-energy"></i></span>
+                    <h4><strong>Preprocessing</strong></h4>
+                    <p class="mb-0 text-faded">Auto preprocess your data</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="footer text-center">
+        <div class="container">
+            <ul class="list-inline mb-5" data-aos="slide-up">
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" href="#"><i class="icon-social-facebook"></i></a></li>
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" href="#"><i class="icon-social-twitter"></i></a></li>
+                <li class="list-inline-item">&nbsp;<a class="text-white social-link rounded-circle" href="#"><i class="icon-social-github"></i></a></li>
+            </ul>
+            <p class="text-muted mb-0 small">Copyright &nbsp;© Researchera 2019</p>
+        </div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a></footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{%static 'assets/js/stylish-portfolio.js' %}"></script>
+    <script src="{%static 'assets/js/bs-animation.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
 </body>
 
 </html>
