@@ -21,9 +21,12 @@
     <!--Custom CSS -->
     <link rel="stylesheet" href="{%static 'css/cssstyle.css' %}">
     <style>
-        /*
-    DEMO STYLE
-*/
+    .loader{
+    position: fixed;
+left: 50%;
+top: 50%;
+z-index: 9999;
+}
     </style>
 
     <!-- Font Awesome JS -->
@@ -33,7 +36,10 @@
 </head>
 
 <body>
-
+        <div id="overlay">
+                <img class="loader" src="{% static 'img/sliding_square_loader_view.gif' %}" alt="Loading" />
+                Loading...
+           </div>
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -128,10 +134,17 @@
                   <h1 class="display-5">{{proj.name}}</h1>
                   </div>
                   <div class="col-6">
-                  <button class="btn peach-gradient relevant " style="position:absolute;right:0">See Relevant Papers</button> 
+                  <button class="btn peach-gradient relevant " style="position:absolute;right:0">See Relevant Papers</button>
                 </div>
                   </div>
-                  <h4>{{proj.ini_pitch}}</h4>
+                  <div class="row">
+                      <div class = "col-sm-8" style="word-wrap: break-word;">
+                        <h4>{{proj.ini_pitch}}</h4>
+                      </div>
+                      <div class = "col-sm-4">
+                  <button class="btn blue-gradient mlzone " style="position:absolute;right:0">ML Zone</button>
+                </div>
+                </div>
                 <br>    
         <h5> Progress</h5>
         <div class="progress md-progress" style="height: 20px">
@@ -145,7 +158,7 @@
 Upload a file: <input type="file" name="document" id= "upload" name="file" required> </div>
 <div class="form-group"><input class="form-control" type="text" name="remarks" placeholder="Remarks"></div>
 <div class="form-group"><input type="hidden" value="upload" name="upload"   ></div>
-<div class="form-group"><input type="hidden" value="{{proj.id}}" name="proj_id"></div>
+<div class="form-group"><input type="hidden" value="{{proj.id}}" name="proj_id" id="proj_id"></div>
 <div class="form-group"><button type="button" onclick="submitForm()" class="btn btn-warning uploadbtn">Upload</button></div>
 </form>
 <div class="card files">
@@ -195,6 +208,7 @@ Upload a file: <input type="file" name="document" id= "upload" name="file" requi
 
 
     <script type="text/javascript">
+        localStorage.setItem("proj_id",$("#proj_id").val());
         var url = ""
         $(document).ready(function () {
         $('#sidebarCollapse').on('click', function () {
@@ -222,11 +236,19 @@ Upload a file: <input type="file" name="document" id= "upload" name="file" requi
         }
         $('.back').on('click',function(){
             window.location.href = "/home/projects";
-        })
+        });
         $('.relevant').on('click',function(){
             window.location.href = "/home/projects/project/relevant"
+            $('#overlay').show();
         });
-
+        $('.mlzone').on('click',function(){
+            window.location.href = "/mlzone"
+        });
+        $(function(){
+            // PAGE IS FULLY LOADED  
+            // FADE OUT YOUR OVERLAYING DIV
+            $('#overlay').fadeOut();
+         });
     });
     </script>
 </body>

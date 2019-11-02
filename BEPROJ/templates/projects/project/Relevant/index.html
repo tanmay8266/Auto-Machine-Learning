@@ -1,4 +1,4 @@
-{%load static%}
+{% load static %}
 <!DOCTYPE html>
 <html>
 
@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
 
     <!--Custom CSS -->
-    <link rel="stylesheet" href="{% static '/css/cssstyle.css' %}">
+    <link rel="stylesheet" href="{%static 'css/cssstyle.css' %}">
     <style>
         /*
     DEMO STYLE
@@ -33,6 +33,7 @@
 </head>
 
 <body>
+
     <div class="wrapper">
         <!-- Sidebar  -->
         <nav id="sidebar">
@@ -43,7 +44,7 @@
 
             <ul class="list-unstyled components">
                 <li class="active">
-                    <a href="../">
+                    <a href="../../">
                         <i class="fas fa-home"></i>
                         Home
                     </a>
@@ -76,6 +77,7 @@
         </nav>
 
         <!-- Page Content  -->
+
         <div id="content">
 
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -87,7 +89,7 @@
                     <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <i class="fas fa-align-justify"></i>
                     </button>
-
+                    <button type="button" class="btn btn-dark project"><i class="fas fa-arrow-left"></i>&nbsp;&nbsp; Back to project</button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="nav navbar-nav ml-auto">
                             <li class="nav-item active">
@@ -97,46 +99,20 @@
                     </div>
                 </div>
             </nav>
-            <div class="row">
-            {% for proj in projects %}
-            <div class="col-sm-4">
-                    <form action="" method="POST">
-                        {% csrf_token %}
-            <!-- Card -->
-        <div class="card">
-
-        <!-- Card image -->
-        <img class="card-img-top" src="{%static 'img/project_img.jpg'%}" alt="Card image cap">
-      
-        <!-- Card content -->
-        <div class="card-body">
-      
-          <!-- Title -->
-          <h4 class="card-title"><a>{{proj.name}}</a></h4>
-          <!-- Text -->
-          <p class="card-text">{{proj.ini_pitch}}</p>
-          <!-- Button -->
-          <button href="#"  class="btn btn-warning openbtn">Open</button>
-          <input type="hidden" value="{{proj.id}}" name="proj_id">
-      
-        </div>
-      
-      </div>
-      <!-- Card -->
-      </form>
-    </div>
-    {% if forloop.last %}
-    </div>
-    {% else %}
-        {% if forloop.counter|divisibleby:"3" %}
-        </div><div class="row">
-        {% endif %}
-    {% endif %}
-    {% endfor %}
-        </div>
-        </div>
+            {% for rel in results %}
+            <div class="jumbotron">
+                    <h2 class="display-4">{{rel.title}}</h2>
+                    <p class="lead">{{rel.abstract}}</p>
+                    <hr class="my-4">
+                    <p>{{rel.author}}</p>
+                    <p>{{rel.cited}}</p>
+                    <a class="btn btn-primary btn-lg" href="{{rel.url}}" role="button">Learn more</a>
+            </div>
+            {% endfor %}
             
-            
+              
+    </div>
+            </div>
 
     <!-- jQuery CDN - Slim version (=without AJAX) -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -153,10 +129,15 @@
     <script type="text/javascript">
         var url = ""
         $(document).ready(function () {
-            $('#sidebarCollapse').on('click', function () {
+        $('#sidebarCollapse').on('click', function () {
                 $('#sidebar').toggleClass('active');
             });
-                    });
+        $('.project').on('click',function(){
+                window.location.href = "/home/projects/project";
+            });
+        
+
+    });
     </script>
 </body>
 
