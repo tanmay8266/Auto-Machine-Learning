@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from sklearn.linear_model import LogisticRegression
  
 # Create your views here.
 @login_required
@@ -27,17 +27,27 @@ def indexml(request):
             col2 = request.POST['col2']
             print(col1,col2,request.session['proj_id'],request.session['name'])
             data = pd.read_csv(os.path.join(settings.MEDIA_ROOT,"media/"+request.session['name']+".csv"))
-            f,ax=plt.subplots(1,2,figsize=(12,6))
-            expl = len(data[col1].value_counts())
-            explode_list = [0]*expl
-            data[col1].value_counts().plot.pie(explode=explode_list,autopct='%1.1f%%',ax=ax[0],shadow=True)
-            ax[0].set_title(col1)
-            ax[0].set_ylabel('')
-            sns.countplot(col1,data=data,ax=ax[1])
-            ax[1].set_title(col1)
-            plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2))
-            rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2)}
-            return(JsonResponse(rdata))
+            if col1==col2:
+                f,ax=plt.subplots(1,2,figsize=(12,6))
+                expl = len(data[col1].value_counts())
+                explode_list = [0]*expl
+                data[col1].value_counts().plot.pie(explode=explode_list,autopct='%1.1f%%',ax=ax[0],shadow=True)
+                ax[0].set_title(col1)
+                ax[0].set_ylabel('')
+                sns.countplot(col1,data=data,ax=ax[1])
+                ax[1].set_title(col1)
+                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2))
+                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2)}
+                return(JsonResponse(rdata))
+            else:
+                f,ax=plt.subplots(1,2,figsize=(12,6))
+                data[[col1,col2]].groupby([col1]).mean().plot.bar(ax=ax[0])
+                ax[0].set_title(col1+' vs '+col2)
+                sns.countplot(col1,hue=col2,data=data,ax=ax[1])
+                ax[1].set_title(col1+" vs "+col2)
+                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2))
+                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2)}
+                return(JsonResponse(rdata))
         elif('file' in request.FILES):
             request.session['proj_id'] = request.POST['proj_id']
             uploaded_file = request.FILES['file']
@@ -54,3 +64,15 @@ def indexml(request):
             return JsonResponse(rdata)
     else:
         return(render(request,"ml/indexml.html"))
+'''The data preprocessing algorithm'''
+''' Asking the user if the columns are important'''
+'''
+- If user deletes the columns then proceed if he doesn't then algorithm will analyse the columns and prepare for deletion with
+an advice to user
+- After the deletion of columns prepare for null value analysis
+- Null value analysis can be done by showing user first about null columns and ask if algorithm
+can delete it
+- If user permits the dataset with null values then select the columns with null values 
+and if numeric data then fill with average/median
+- If text then simply take which one occurs more(note this will depend the amount of nulls if nulls are 
+less then only use this method)'''
