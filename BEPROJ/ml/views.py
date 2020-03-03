@@ -14,7 +14,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LogisticRegression
- 
+import re
+from sklearn.model_selection import train_test_split
+from sklearn.feature_selection import RFE
+from sklearn.linear_model import RidgeCV, LassoCV, Ridge, Lasso
+import math
 # Create your views here.
 @login_required
 def index(request):
@@ -22,6 +26,7 @@ def index(request):
 @login_required
 def indexml(request):
     if request.POST:
+        print("help")
         if('col1' in request.POST):
             col1 = request.POST['col1']
             col2 = request.POST['col2']
@@ -62,6 +67,72 @@ def indexml(request):
             file.save()
             rdata={"snapshot":snapshot.to_html(header="true", table_id="table"),"row":row,"col":col,"columns":json.dumps(columns)}
             return JsonResponse(rdata)
+        elif('action' in request.POST):
+            action = request.POST["action"]
+            filename = request.POST["filename"]
+            if(action=="clean"):
+                data = pd.read_csv('media/media/'+filename)
+                print(filename,"read was successful")
+                for i,j in zip(data.columns,data.isnull().sum()/data.shape[0]>0.50):
+                    if(j==True):
+                        print(i," has been dropped")
+                        data=data.drop(str(i),axis=1)
+                alter_list = []
+                for i,j in zip(data.columns,data.isnull().sum()):
+                    if(j>0):
+                        if(data[i].dtypes == "float64" or data[i].dtypes == "int64"):
+                            data_type="Numeric"
+                        elif(data[i].dtypes == "object"):
+                            data_type="String"
+                        else:
+                            data_type=""
+                        print(i,j," Data type being : ",data_type)
+                        alter_list.append((i,data_type))
+                for i in alter_list:
+                    if i[1] == "Numeric":
+                        data[i[0]] = data[i[0]].fillna(data[i[0]].mean())
+                    elif i[1]=="String":
+                        print("Unique values in the column",i[0],data[i[0]].unique())
+                        print("Number of unique vlaues in column",i[0], data[i[0]].nunique())
+                        print("Number of each unique value occurances made in column",i[0]+":\n",data[i[0]].value_counts(dropna=False))
+                        toleration_limit = math.floor(data.shape[0]*0.1)
+                        if data[i[0]].nunique()>toleration_limit:
+                            data = data.drop(i[0],axis=1)
+                        else:
+                            maxm_occ = data[i[0]].value_counts(dropna=False)[:1].index.tolist()
+                            print(maxm_occ[0])
+                            data[i[0]].fillna(maxm_occ[0])
+                print("Analysing Unique Values in a columns as columns with more unique values are likely not to contribute")
+                for i in data.columns:
+                        print("Analysing Column",i)
+                        no_uniq = data[i].nunique()
+                        print(no_uniq)
+                        print(data.shape[0])
+                        print(no_uniq/data.shape[0])
+                        if(no_uniq/data.shape[0]>0.1):
+                            data = data.drop(str(i),axis=1)
+                data = pd.get_dummies(data)
+                print(data.head())
+                X=data.drop("Survived",1)
+                y=data["Survived"]
+                data.isnull().sum()
+                reg = LassoCV()
+                reg.fit(X, y)
+                print("Best alpha using built-in LassoCV: %f" % reg.alpha_)
+                print("Best score using built-in LassoCV: %f" %reg.score(X,y))
+                coef = pd.Series(reg.coef_, index = X.columns)                                
+                print("Lasso picked " + str(sum(coef != 0)) + " variables and eliminated the other " +  str(sum(coef == 0)) + " variables")
+                cor = data.corr()
+                #Correlation with output variable
+                cor_target = abs(cor["Survived"])
+                #Selecting highly correlated features
+                relevant_features = cor_target[cor_target>0.2]
+                
+                rdata = {"result":"Successful"}
+            return(JsonResponse(rdata))
+        else:
+            rdata = {"Content":"You've reached end of POST request!"}
+
     else:
         return(render(request,"ml/indexml.html"))
 '''The data preprocessing algorithm'''
