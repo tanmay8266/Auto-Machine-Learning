@@ -15,6 +15,16 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+    <style>
+            #myVideo {
+                position: absolute;
+                right: 0;
+                bottom: 0;
+                min-width: 100%;
+                min-height: 100%;
+                z-index: -1;
+              }
+    </style>
 </head>
 
 <body id="page-top"><a class="menu-toggle rounded" href="#"><i class="fa fa-bars"></i></a>
@@ -32,10 +42,13 @@
             </div>
         </div>
     </nav>
-    <header class="d-flex masthead" style="background-image:url('{%static 'assets/img/bg-masthead.jpg' %}');">
+    <header class="d-flex masthead">
         <div class="container my-auto text-center" style="padding-bottom: 0px;">
-            <h1 class="text-center mb-1" style="font-family: 'Source Sans Pro', sans-serif;">&nbsp; ML ZONE<i class="fa fa-magic wobble animated"></i></h1>
-            <h1 class="text-center"><i class="fas fa-flask jello animated infinite"></i></h1>
+                <video autoplay muted loop id="myVideo">
+                        <source src="{% static 'img/plexus.mp4' %}" type="video/mp4">
+                    </video>
+            <h1 class="text-center mb-1" style="color:aliceblue;font-family: 'Source Sans Pro', sans-serif;">&nbsp; ML ZONE<i class="fa fa-magic wobble animated"></i></h1>
+            <h1 style="color:aliceblue"class="text-center"><i class="fas fa-flask jello animated infinite"></i></h1>
             <h3 class="mb-5"></h3><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="#about" style="margin-top: -38px;">Find Out More</a>
             <div class="overlay" style="padding-bottom: 7px;margin-top: 11px;"><a class="btn btn-primary btn-xl js-scroll-trigger" role="button" href="ml" style="margin-top: 10px;">Get Started!</a></div>
         </div>

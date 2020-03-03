@@ -38,10 +38,10 @@
             </div>
         </div>
     </nav>
-    <header class="d-flex masthead" style="background-image:url('{%static 'assets/img/bg-masthead.jpg' %}');">
+    <header class="d-flex masthead" style="background-image:url('{%static 'assets/img/portfolio-2.jpg' %}');">
         <div class="container my-auto text-center" style="padding-bottom: 0px;">
-            <h1 class="text-center mb-1" style="font-family: 'Source Sans Pro', sans-serif;">&nbsp; ML ZONE<i class="fa fa-magic wobble animated"></i></h1>
-            <h1 class="text-center"><i class="fas fa-flask jello animated infinite"></i></h1>
+            <h1 class="text-center mb-1" style="color:aliceblue;font-family: 'Source Sans Pro', sans-serif;">&nbsp; ML ZONE<i class="fa fa-magic wobble animated"></i></h1>
+            <h1 class="text-center" style="color: aliceblue;"><i class="fas fa-flask jello animated infinite"></i></h1>
             <div class="card">
                 <div class="card-body">
                   <h5 class="card-title">Drag and Drop your xls or csv file here!</h5>
@@ -116,7 +116,31 @@
 
             </div>
             </div>
-
+            <div class="row">
+                                <div class="col text-center">
+                                    </div>
+                                    <div class="col text-center">
+                                            <button id="clean" class="btn purple-gradient">Auto-Clean Data</button>
+                                    </div>
+                                    <div class="col text-center">
+                                                </div>
+                            </div>
+    </section>
+    <section class="model">
+        <div class="card text-center">
+            <div class="card-body">
+                The data has been cleaned!! Proceed to train..
+            </div>
+        </div>
+        <div class="row">
+                                <div class="col text-center">
+                                    </div>
+                                    <div class="col text-center">
+                                            <button class="btn peach-gradient">Train</button>
+                                    </div>
+                                    <div class="col text-center">
+                                                </div>
+                            </div>
     </section>
     <footer class="footer text-center">
         <div class="container">
@@ -132,8 +156,11 @@
 
     <script>
         $('.tbd').hide();
+        $('.model').hide();
         $("#upload").on('change',function(event) { // bCheck is a input type button
-            var fileName = $("#upload").val();
+            var fileName = event.target.files[0].name;
+            console.log(fileName);
+            localStorage.setItem("filename",fileName);
             $('#pro_id').val(localStorage.getItem("proj_id"));
             if(fileName) { // returns true if the string is not empty
                 $.ajax({
@@ -214,6 +241,22 @@
                 error : function(xhr,errmsg,err) {
                  // provide a bit more info about the error to the console
             }
+            });
+        });
+        $("#clean").on("click",function(){
+            var filename = localStorage.getItem("filename");
+            $.ajax({
+                type:'POST',
+                url:'',
+                data:{
+                    action:"clean",
+                    filename: filename,
+                    csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(data){
+                    $(".model").show(),
+                    alert(data["result"]);
+                }
             });
         });
     </script>
