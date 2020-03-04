@@ -129,14 +129,15 @@
     <section class="model">
         <div class="card text-center">
             <div class="card-body">
-                The data has been cleaned!! Proceed to train..
+                The data has been cleaned! and saved in your project data.<br>You can now proceed to train..
             </div>
+            <a id="clean_download" href="" class="btn btn-primary btn-sm" target="_blank">Download</a>
         </div>
         <div class="row">
                                 <div class="col text-center">
                                     </div>
                                     <div class="col text-center">
-                                            <button class="btn peach-gradient">Train</button>
+                                            <button id="train_btn" class="btn peach-gradient">Train</button>
                                     </div>
                                     <div class="col text-center">
                                                 </div>
@@ -255,10 +256,52 @@
                 },
                 success:function(data){
                     $(".model").show(),
+                    $("#clean_download").attr("href",data["clean_url"]),
                     alert(data["result"]);
                 }
             });
         });
+        $("#train_btn").on("click",function(){
+            var filelink = $("#clean_download").attr("href");
+            $.ajax({
+                type:'POST',
+                url:'',
+                data:{
+                    action:"train",
+                    clean_file_link:filelink,
+                    csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(data){
+                    alert("Success!!");
+                    var columns = JSON.parse(data["columns"])
+                    var i;
+                    for(i=0;i< data["col"];i++){
+                        $(".model").append("<input name='cols' type='number' placeholder="+columns[i]+"></input>");
+                    }
+                    $(".model").append("<button type='button' class='btn btn-light-green' onclick='predict()'>Predict</button>");
+                }
+            });
+        });
+        function predict(){
+            console.log("Innn");
+            var types = [];
+            $("input[name='cols']").each(function() {
+                types.push($(this).val());
+            });
+            console.log(types);
+            $.ajax({
+                type:'POST',
+                url:'',
+                data:{
+                    action:"predict",
+                    'col_input[]':types,
+                    csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
+                },
+                success:function(data){
+                    alert("I'm back with prediction")
+                }
+            })
+        }
     </script>
 </body>
 

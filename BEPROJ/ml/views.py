@@ -7,6 +7,7 @@ from researchera.models import Research,Files
 from datetime import date
 from django.core.files.storage import FileSystemStorage
 from django.conf import settings
+import pickle
 import os
 # import required libraries
 import numpy as np 
@@ -69,8 +70,8 @@ def indexml(request):
             return JsonResponse(rdata)
         elif('action' in request.POST):
             action = request.POST["action"]
-            filename = request.POST["filename"]
             if(action=="clean"):
+                filename = request.POST["filename"]
                 data = pd.read_csv('media/media/'+filename)
                 print(filename,"read was successful")
                 for i,j in zip(data.columns,data.isnull().sum()/data.shape[0]>0.50):
@@ -127,12 +128,49 @@ def indexml(request):
                 cor_target = abs(cor["Survived"])
                 #Selecting highly correlated features
                 relevant_features = cor_target[cor_target>0.2]
+                print(relevant_features)
+                data.to_csv(r'media/media/temp_cleaned_'+filename)
+                file = Files(remarks="Auto Cleaned Data",link='media/temp_cleaned_'+filename,date=date.today(),name="clean_"+filename,specifications="",pro_id=request.session['proj_id'],re_id=request.user.id)
+                file.save()
+                print("id : ",request.user.id,request.session['proj_id'])
+                request.session["filename"] = 'temp_cleaned_'+filename
+                rdata = {"result":"Successful","clean_url":'/media/media/temp_cleaned_'+filename}
+                return(JsonResponse(rdata))
+            elif(request.POST["action"]=="train"):
+                filelink = request.POST["clean_file_link"]
+                data = pd.read_csv(filelink[1:])
+                model = LogisticRegression(fit_intercept=True)
+                survived_train = data.Survived
+                data = data.drop("Survived",axis=1)
+                train_data = data.values[:600]
+                labels = survived_train[:600]
+                eval_data = data.values[600:]
+                eval_labels = survived_train[600:]
+                model.fit(train_data, labels)
+                eval_predictions = model.predict(eval_data)
+                print('Accuracy of the model on train data: {0}'.format(model.score(train_data, labels)))
+                print('Accuracy of the model on eval data: {0}'.format(model.score(eval_data, eval_labels)))
+                size = data.shape
+                col = size[1]
+                columns = list(data.columns)
+                pkl_filename = "media/media/"+request.session["filename"].split(".")[0]+"_model.pkl"
+                with open(pkl_filename, 'wb') as file:
+                    pickle.dump(model, file)
+                rdata = {"result":"success","columns":json.dumps(columns[1:]),"col":col-1}
+                return(JsonResponse(rdata))
+            elif(request.POST['action']=="predict"):
+                single_x_test = request.POST.getlist('col_input[]')
+                print(single_x_test)
                 
-                rdata = {"result":"Successful"}
-            return(JsonResponse(rdata))
+                pkl_filename = "media/media/"+request.session["filename"].split(".")[0]+"_model.pkl"
+                with open(pkl_filename, 'rb') as file:
+                    model = pickle.load(file)
+                single_x_test = np.array(single_x_test)
+                print(single_x_test.reshape(1,-1))
+                q = model.predict(single_x_test.reshape(-1,1)) 
+                print(q)
         else:
             rdata = {"Content":"You've reached end of POST request!"}
-
     else:
         return(render(request,"ml/indexml.html"))
 '''The data preprocessing algorithm'''
