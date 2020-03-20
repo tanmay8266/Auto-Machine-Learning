@@ -116,6 +116,20 @@
 
             </div>
             </div>
+            <div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Target column</h4></span>
+                    <div class="card-body">
+                    <div class="row">
+                                <div class="col text-center">
+                                    </div>
+                                    <div class="col text-center">
+                                            <select class="select-3">
+                                                <option selected>Open this select menu</option>
+                                            </select>
+                                    </div>
+                                    <div class="col text-center">
+                                                </div>
+                            </div>
             <div class="row">
                                 <div class="col text-center">
                                     </div>
@@ -125,6 +139,10 @@
                                     <div class="col text-center">
                                                 </div>
                             </div>
+
+            </div>
+            </div>
+            
     </section>
     <section class="model">
         <div class="card text-center">
@@ -143,6 +161,47 @@
                                                 </div>
                             </div>
     </section>
+    <section class="gr_cl">
+    <div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-drafting-compass fa-2x"></i><h4>Graph Plots (Beta Mode)</h4></span>
+                    <div class="card-body dataselect">
+                        <form method="POST" id="post-form">
+                                    {% csrf_token %}
+                        <div class="row">
+                            <div class="col text-center">
+                            <select class="select-4">
+                                    <option selected>Open this select menu</option>
+                                  </select>
+                                </div>
+                                <div class="col text-center">
+                                    <h5>Against</h5>
+                                </div>
+                                <div class="col text-center">
+                                        <select class="select-5">
+                                                <option selected>Open this select menu</option>
+                                                
+                                              </select>
+                                            </div>
+                        </div>
+                        </form>
+                        <div class="row">
+                                <div class="col text-center">
+                                    </div>
+                                    <div class="col text-center">
+                                            <button class="btn blue-gradient" id="plot1">Plot</button>
+                                    </div>
+                                    <div class="col text-center">
+                                                </div>
+                            </div>
+            </div>
+            </div>
+            <div class="card gr_cl_gr">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Graph Plots</h4><h5>This feature is in Beta Mode</h5></span>
+                    <div class="card-body graphplot">
+                            <img src="" class="img-fluid igraph1" alt="Responsive image">
+            </div>
+            </div>
+            </section>
     <footer class="footer text-center">
         <div class="container">
             <p class="text-muted mb-0 small">Copyright &nbsp;© Researchera 2019</p>
@@ -158,6 +217,8 @@
     <script>
         $('.tbd').hide();
         $('.model').hide();
+        $('.gr_cl').hide();
+        $('.gr_cl_gr').hide();
         $("#upload").on('change',function(event) { // bCheck is a input type button
             var fileName = event.target.files[0].name;
             console.log(fileName);
@@ -216,6 +277,7 @@
                         for (var i = 0; i < arrayList.length; i++) {
                             $('.select-1').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                             $('.select-2').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
+                            $('.select-3').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                         }          
                     }
                   });
@@ -251,13 +313,20 @@
                 url:'',
                 data:{
                     action:"clean",
+                    target:$( ".select-3 option:selected" ).text(),
                     filename: filename,
                     csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(data){
-                    $(".model").show(),
-                    $("#clean_download").attr("href",data["clean_url"]),
-                    alert(data["result"]);
+                    $(".model").show()
+                    $('.gr_cl').show()
+                    $("#clean_download").attr("href",data["clean_url"])
+                    alert(data["result"])
+                    arrayList = JSON.parse(data["columns"])
+                        for (var i = 0; i < arrayList.length; i++) {
+                            $('.select-4').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
+                            $('.select-5').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
+                        }
                 }
             });
         });
@@ -298,11 +367,29 @@
                     csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(data){
-                    alert("I'm back with prediction")
+                    alert("I'm back with prediction"+data['prediction'])
                 }
             })
         }
+        $("#plot1").on("click",function(){
+            $.ajax({
+                type:'POST',
+                url:'',
+                data:{
+                    col3:$( ".select-4 option:selected" ).text(),
+                    col4:$( ".select-5 option:selected" ).text(),
+                    csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val(),
+                    action: 'post'
+                },
+                success:function(data){
+                    $(".gr_cl_gr").show()
+                    $(".igraph1").prop("src",data["url"])
+                },
+                error : function(xhr,errmsg,err) {
+                 // provide a bit more info about the error to the console
+            }
+            });
+        });
     </script>
 </body>
-
 </html>

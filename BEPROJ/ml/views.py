@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LogisticRegression
 import re
+from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import RidgeCV, LassoCV, Ridge, Lasso
@@ -54,6 +55,32 @@ def indexml(request):
                 plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2))
                 rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col1+col2)}
                 return(JsonResponse(rdata))
+        elif('col3' in request.POST):
+            col3 = request.POST['col3']
+            col4 = request.POST['col4']
+            print(col3,col4,request.session['proj_id'],request.session['name'])
+            data = pd.read_csv(request.session['clean_file_link'])
+            if col3==col4:
+                f,ax=plt.subplots(1,2,figsize=(12,6))
+                expl = len(data[col3].value_counts())
+                explode_list = [0]*expl
+                data[col3].value_counts().plot.pie(explode=explode_list,autopct='%1.1f%%',ax=ax[0],shadow=True)
+                ax[0].set_title(col3)
+                ax[0].set_ylabel('')
+                sns.countplot(col3,data=data,ax=ax[1])
+                ax[1].set_title(col3)
+                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4))
+                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4)}
+                return(JsonResponse(rdata))
+            else:
+                f,ax=plt.subplots(1,2,figsize=(12,6))
+                data[[col3,col4]].groupby([col3]).mean().plot.bar(ax=ax[0])
+                ax[0].set_title(col3+' vs '+col4)
+                sns.countplot(col3,hue=col4,data=data,ax=ax[1])
+                ax[1].set_title(col3+" vs "+col4)
+                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4))
+                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4)}
+                return(JsonResponse(rdata))
         elif('file' in request.FILES):
             request.session['proj_id'] = request.POST['proj_id']
             uploaded_file = request.FILES['file']
@@ -71,9 +98,12 @@ def indexml(request):
         elif('action' in request.POST):
             action = request.POST["action"]
             if(action=="clean"):
+                target = request.POST["target"]
+                request.session["target"] = target
                 filename = request.POST["filename"]
                 data = pd.read_csv('media/media/'+filename)
                 print(filename,"read was successful")
+                le = preprocessing.LabelEncoder()
                 for i,j in zip(data.columns,data.isnull().sum()/data.shape[0]>0.50):
                     if(j==True):
                         print(i," has been dropped")
@@ -102,8 +132,9 @@ def indexml(request):
                         else:
                             maxm_occ = data[i[0]].value_counts(dropna=False)[:1].index.tolist()
                             print(maxm_occ[0])
-                            data[i[0]].fillna(maxm_occ[0])
+                            data[i[0]].fillna(maxm_occ[0],inplace=True)
                 print("Analysing Unique Values in a columns as columns with more unique values are likely not to contribute")
+                print(data.isnull().sum())
                 for i in data.columns:
                         print("Analysing Column",i)
                         no_uniq = data[i].nunique()
@@ -111,11 +142,22 @@ def indexml(request):
                         print(data.shape[0])
                         print(no_uniq/data.shape[0])
                         if(no_uniq/data.shape[0]>0.1):
+                            print("Dropped",str(i))
                             data = data.drop(str(i),axis=1)
+                        else:
+                            print("no uniq before",no_uniq)
+                            # print(data[i])
+                            data[i] = le.fit_transform(data[i])
+                            if (no_uniq>(data.shape[0]*(0.09))):
+                                data[i] = pd.cut(x=data[i],bins=math.ceil(math.sqrt(no_uniq)),labels=False)
+                                # info_bins = pd.cut(x=data[i],bins=math.ceil(math.sqrt(no_uniq)))
+                                print("nuniq after",data[i].nunique())
+                if(data[target].dtypes == "object"):
+                    data[target] = le.fit_transform(data[target]) 
+                X=pd.get_dummies(data.drop(target,1))
+                y=data[target]
                 data = pd.get_dummies(data)
                 print(data.head())
-                X=data.drop("Survived",1)
-                y=data["Survived"]
                 data.isnull().sum()
                 reg = LassoCV()
                 reg.fit(X, y)
@@ -125,7 +167,7 @@ def indexml(request):
                 print("Lasso picked " + str(sum(coef != 0)) + " variables and eliminated the other " +  str(sum(coef == 0)) + " variables")
                 cor = data.corr()
                 #Correlation with output variable
-                cor_target = abs(cor["Survived"])
+                cor_target = abs(cor[target])
                 #Selecting highly correlated features
                 relevant_features = cor_target[cor_target>0.2]
                 print(relevant_features)
@@ -134,20 +176,41 @@ def indexml(request):
                 file.save()
                 print("id : ",request.user.id,request.session['proj_id'])
                 request.session["filename"] = 'temp_cleaned_'+filename
-                rdata = {"result":"Successful","clean_url":'/media/media/temp_cleaned_'+filename}
+                columns = list(data.columns)
+                request.session["clean_file_link"]='media/media/temp_cleaned_'+filename
+                rdata = {"result":"Successful","clean_url":'/media/media/temp_cleaned_'+filename,"columns":json.dumps(columns)}
                 return(JsonResponse(rdata))
             elif(request.POST["action"]=="train"):
+                target = request.session["target"]
                 filelink = request.POST["clean_file_link"]
                 data = pd.read_csv(filelink[1:])
-                model = LogisticRegression(fit_intercept=True)
-                survived_train = data.Survived
-                data = data.drop("Survived",axis=1)
-                train_data = data.values[:600]
-                labels = survived_train[:600]
-                eval_data = data.values[600:]
-                eval_labels = survived_train[600:]
-                model.fit(train_data, labels)
-                eval_predictions = model.predict(eval_data)
+                first_column = data.columns[0]
+                no_uniq = data[target].nunique()
+                # Delete first
+                data = data.drop([first_column], axis=1)
+                print("target_col",data[target])
+                survived_train = data[target]
+                data = data.drop(target,axis=1)
+                train_data,eval_data,labels,eval_labels = train_test_split(data, survived_train, random_state = 0)
+                # train_data = data.values[:600]
+                # labels = survived_train[:600]
+                # eval_data = data.values[600:]
+                # eval_labels = survived_train[600:]
+                if(no_uniq==2):
+                    model = LogisticRegression(fit_intercept=True)
+                    model.fit(train_data, labels)
+                    eval_predictions = model.predict(eval_data)
+                    print("Using Logistic Regression")
+                else:
+                #     from sklearn.tree import DecisionTreeClassifier 
+                #     model = DecisionTreeClassifier(max_depth = 3).fit(train_data, labels) 
+                #     eval_predictions = model.predict(eval_data)
+                    
+                    from sklearn.svm import SVC 
+                    model= SVC(kernel = 'linear', C = 1).fit(train_data, labels) 
+                    eval_predictions = model.predict(eval_data)
+                    print("Using SVC") 
+                # eval_predictions = model.predict(eval_data)
                 print('Accuracy of the model on train data: {0}'.format(model.score(train_data, labels)))
                 print('Accuracy of the model on eval data: {0}'.format(model.score(eval_data, eval_labels)))
                 size = data.shape
@@ -156,7 +219,7 @@ def indexml(request):
                 pkl_filename = "media/media/"+request.session["filename"].split(".")[0]+"_model.pkl"
                 with open(pkl_filename, 'wb') as file:
                     pickle.dump(model, file)
-                rdata = {"result":"success","columns":json.dumps(columns[1:]),"col":col-1}
+                rdata = {"result":"success","columns":json.dumps(columns),"col":col}
                 return(JsonResponse(rdata))
             elif(request.POST['action']=="predict"):
                 single_x_test = request.POST.getlist('col_input[]')
@@ -165,10 +228,13 @@ def indexml(request):
                 pkl_filename = "media/media/"+request.session["filename"].split(".")[0]+"_model.pkl"
                 with open(pkl_filename, 'rb') as file:
                     model = pickle.load(file)
+                for i in range(len(single_x_test)):
+                    single_x_test[i]=int(single_x_test[i])
                 single_x_test = np.array(single_x_test)
-                print(single_x_test.reshape(1,-1))
-                q = model.predict(single_x_test.reshape(-1,1)) 
-                print(q)
+                q = model.predict(single_x_test.reshape(1,-1))
+                print(q[0]) 
+                rdata = {"prediction":int(q[0])}
+                return(JsonResponse(rdata))
         else:
             rdata = {"Content":"You've reached end of POST request!"}
     else:
