@@ -5,6 +5,7 @@ import re
 from . import views
 urlpatterns = [
     path('',views.index,name = "index"),
-    path('ml',views.indexml,name = "ml")
+    path('ml',views.indexml,name = "ml"),
+    path('summarization',views.indexs,name = "summarization")
 ]
 

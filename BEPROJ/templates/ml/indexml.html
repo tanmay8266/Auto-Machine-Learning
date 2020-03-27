@@ -72,7 +72,7 @@
             </div>
             <div class="card">
                     <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Data Head</h4></span>
-                    <div class="card-body datahead">
+                    <div class="card-body datahead table-responsive">
 
             </div>
             </div>
@@ -207,12 +207,27 @@
             <p class="text-muted mb-0 small">Copyright &nbsp;© Researchera 2019</p>
         </div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a></footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
     <script src="{%static 'assets/js/stylish-portfolio.js' %}"></script>
     <script src="{%static 'assets/js/bs-animation.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/css/mdb.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.14.1/js/mdb.min.js"></script>
 
     <script>
         $('.tbd').hide();
@@ -267,7 +282,7 @@
                         },
                         'slow');
                         $(".datahead").append(data['snapshot'])
-                        $("table").addClass("table")
+                        $("table").addClass("table table-responsive")
                         $("table").css("overflow","scroll")
                         $("table").removeClass("dataframe")
                         $("table").prop("border",0)
@@ -341,13 +356,60 @@
                     csrfmiddlewaretoken:$('#post-form input[name=csrfmiddlewaretoken]').val()
                 },
                 success:function(data){
-                    alert("Success!!");
+
                     var columns = JSON.parse(data["columns"])
+                    var val_acc = data["val_acc"]
+                    var train_acc = data["train_acc"]
+                    var model_used = data["model_used"]
+                    var url_dict = data["url_dict"]
+
+
+                    alert("Success!!"+"\n"+"train_acc:"+train_acc+"val_acc"+val_acc+"model_used"+model_used);
+                    $(".model").append(`<div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Summary of Training</h4></span>
+                        <div class="card-body">
+                        <br><div class="row" ><div class="col-sm-3"></div><div class="col-sm-6 table-responsive" style="text-align:center;"><table id="tablePreview" class="table table-striped table-hover table-borderless"><thead><tr><th>#</th><th>Model Used</th><th>Training<br>Accuracy</th><th>Validation<br>Accuracy</th></tr></thead><tbody><tr><th scope="row">1</th><td>${model_used}</td><td>${train_acc}</td><td>${val_acc}</td></tr></tbody></table></div><div class="col-sm-3"></div></div><br>
+                        </div>`)
                     var i;
+                    $(".model").append(`<div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Predictions</h4><h5>Enter the value to get value of Target Variable</h5></span>
+                        <div class="card-body preds">
+                        </div>
+                    </div>`)
+                    var s = 0;
                     for(i=0;i< data["col"];i++){
-                        $(".model").append("<input name='cols' type='number' placeholder="+columns[i]+"></input>");
+                        if(i%4==0 || i==0){
+                            s = s+1;
+                            $(".preds").append(`<div class="row" id="r${s}"></div>`);
+                        }
+                        $(`#r${s}`).append(`<div class="col-sm-3">
+                                            <div class="card card-cascade narrower">
+
+                                                <div class="view view-cascade overlay">
+                                                <img class="card-img-top" src="${url_dict[columns[i]]}" alt="Card image cap">
+                                                <a href="#!">
+                                                <div class="mask rgba-white-slight"></div>
+                                                </a>
+                                            </div>
+
+                                            <!-- Card content -->
+                                            <div class="card-body card-body-cascade text-center pb-0">
+
+                                                <!-- Title -->
+                                                <h4 class="card-title"><strong>${columns[i]}</strong></h4>
+                                                <!-- Subtitle -->
+                                                <h5 class="blue-text pb-2"><strong>Graffiti Artist</strong></h5>
+                                                <!-- Text -->
+                                                <p class="card-text">Sed ut perspiciatis unde omnis iste natus sit voluptatem accusantium doloremque
+                                                laudantium, totam rem aperiam. </p>
+                                                <input name='cols' type='number' placeholder="${columns[i]}">
+
+                                            </div>
+                                            </div>
+                                            </div>`);
+                        
                     }
-                    $(".model").append("<button type='button' class='btn btn-light-green' onclick='predict()'>Predict</button>");
+                    $(".preds").append("<button type='button' class='btn btn-light-green' onclick='predict()'>Predict</button>");
                 }
             });
         });

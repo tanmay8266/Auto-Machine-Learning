@@ -21,6 +21,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_selection import RFE
 from sklearn.linear_model import RidgeCV, LassoCV, Ridge, Lasso
 import math
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.tokenize import word_tokenize, sent_tokenize
+import pdftotext
+
 # Create your views here.
 @login_required
 def index(request):
@@ -69,8 +74,8 @@ def indexml(request):
                 ax[0].set_ylabel('')
                 sns.countplot(col3,data=data,ax=ax[1])
                 ax[1].set_title(col3)
-                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4))
-                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4)}
+                plt.savefig("media/temp/%s.png"%("cleaned"+request.session['name']+str(request.session['proj_id'])+col3+col4))
+                rdata = {"url":"/media/temp/%s.png"%("cleaned"+request.session['name']+str(request.session['proj_id'])+col3+col4)}
                 return(JsonResponse(rdata))
             else:
                 f,ax=plt.subplots(1,2,figsize=(12,6))
@@ -78,8 +83,8 @@ def indexml(request):
                 ax[0].set_title(col3+' vs '+col4)
                 sns.countplot(col3,hue=col4,data=data,ax=ax[1])
                 ax[1].set_title(col3+" vs "+col4)
-                plt.savefig("media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4))
-                rdata = {"url":"/media/temp/%s.png"%(request.session['name']+str(request.session['proj_id'])+col3+col4)}
+                plt.savefig("media/temp/%s.png"%("cleaned"+request.session['name']+str(request.session['proj_id'])+col3+col4))
+                rdata = {"url":"/media/temp/%s.png"%("cleaned"+request.session['name']+str(request.session['proj_id'])+col3+col4)}
                 return(JsonResponse(rdata))
         elif('file' in request.FILES):
             request.session['proj_id'] = request.POST['proj_id']
@@ -150,7 +155,8 @@ def indexml(request):
                             data[i] = le.fit_transform(data[i])
                             if (no_uniq>(data.shape[0]*(0.09))):
                                 data[i] = pd.cut(x=data[i],bins=math.ceil(math.sqrt(no_uniq)),labels=False)
-                                # info_bins = pd.cut(x=data[i],bins=math.ceil(math.sqrt(no_uniq)))
+                                info_bins = pd.cut(x=data[i],bins=math.ceil(math.sqrt(no_uniq)))
+                                print(info_bins)
                                 print("nuniq after",data[i].nunique())
                 if(data[target].dtypes == "object"):
                     data[target] = le.fit_transform(data[target]) 
@@ -200,6 +206,7 @@ def indexml(request):
                     model = LogisticRegression(fit_intercept=True)
                     model.fit(train_data, labels)
                     eval_predictions = model.predict(eval_data)
+                    model_used = "Logistic Regression"
                     print("Using Logistic Regression")
                 else:
                 #     from sklearn.tree import DecisionTreeClassifier 
@@ -209,17 +216,29 @@ def indexml(request):
                     from sklearn.svm import SVC 
                     model= SVC(kernel = 'linear', C = 1).fit(train_data, labels) 
                     eval_predictions = model.predict(eval_data)
+                    model_used = "SVC"
                     print("Using SVC") 
                 # eval_predictions = model.predict(eval_data)
-                print('Accuracy of the model on train data: {0}'.format(model.score(train_data, labels)))
-                print('Accuracy of the model on eval data: {0}'.format(model.score(eval_data, eval_labels)))
+                train_acc = model.score(train_data,labels)
+                val_acc = model.score(eval_data,eval_labels)
+                print('Accuracy of the model on train data:',train_acc)
+                print('Accuracy of the model on eval data:',val_acc)
                 size = data.shape
                 col = size[1]
+                url_dic = {}
                 columns = list(data.columns)
+                if not os.path.exists("media/"+str(request.user.id)):
+                    os.makedirs("media/"+str(request.user.id))
+                for i in columns:
+                    ax = sns.distplot(data[i])
+                    plt.savefig("media/"+str(request.user.id)+"/%s.png"%("histo"+i))
+                    url_dic[i] =  "/media/"+str(request.user.id)+"/%s.png"%("histo"+i)
+                    plt.close("all")
+                print("Done plotting")
                 pkl_filename = "media/media/"+request.session["filename"].split(".")[0]+"_model.pkl"
                 with open(pkl_filename, 'wb') as file:
                     pickle.dump(model, file)
-                rdata = {"result":"success","columns":json.dumps(columns),"col":col}
+                rdata = {"result":"success","columns":json.dumps(columns),"col":col,"train_acc":train_acc,"val_acc":val_acc,"model_used":model_used,"url_dict":url_dic}
                 return(JsonResponse(rdata))
             elif(request.POST['action']=="predict"):
                 single_x_test = request.POST.getlist('col_input[]')
@@ -239,15 +258,100 @@ def indexml(request):
             rdata = {"Content":"You've reached end of POST request!"}
     else:
         return(render(request,"ml/indexml.html"))
-'''The data preprocessing algorithm'''
-''' Asking the user if the columns are important'''
-'''
-- If user deletes the columns then proceed if he doesn't then algorithm will analyse the columns and prepare for deletion with
-an advice to user
-- After the deletion of columns prepare for null value analysis
-- Null value analysis can be done by showing user first about null columns and ask if algorithm
-can delete it
-- If user permits the dataset with null values then select the columns with null values 
-and if numeric data then fill with average/median
-- If text then simply take which one occurs more(note this will depend the amount of nulls if nulls are 
-less then only use this method)'''
+
+
+def _create_frequency_table(text_string) -> dict:
+
+    stopWords = set(stopwords.words("english"))
+    words = word_tokenize(text_string)
+    ps = PorterStemmer()
+
+    freqTable = dict()
+    for word in words:
+        word = ps.stem(word)
+        if word in stopWords:
+            continue
+        if word in freqTable:
+            freqTable[word] += 1
+        else:
+            freqTable[word] = 1
+
+    return freqTable
+
+def _score_sentences(sentences, freqTable) -> dict:
+    sentenceValue = dict()
+
+    for sentence in sentences:
+        word_count_in_sentence = (len(word_tokenize(sentence)))
+        for wordValue in freqTable:
+            if wordValue in sentence.lower():
+                if sentence[:10] in sentenceValue:
+                    sentenceValue[sentence[:10]] += freqTable[wordValue]
+                else:
+                    sentenceValue[sentence[:10]] = freqTable[wordValue]
+
+        sentenceValue[sentence[:10]] = sentenceValue[sentence[:10]] // word_count_in_sentence
+
+    return sentenceValue
+
+def _find_average_score(sentenceValue) -> int:
+    sumValues = 0
+    for entry in sentenceValue:
+        sumValues += sentenceValue[entry]
+    if(len(sentenceValue) ==0 ):
+        average = int(sumValues/1)
+    else:
+        # Average value of a sentence from original text
+        average = int(sumValues / len(sentenceValue))
+
+    return average
+
+def _generate_summary(sentences, sentenceValue, threshold):
+    sentence_count = 0
+    summary = ''
+
+    for sentence in sentences:
+        if sentence[:10] in sentenceValue and sentenceValue[sentence[:10]] > (threshold):
+            summary += " " + sentence
+            sentence_count += 1
+
+    return summary
+
+@login_required
+def indexs(request):
+    if(request.POST):
+        print("GETT")
+        if('file' in request.FILES):
+            request.session['proj_id'] = request.POST['proj_id']
+            uploaded_file = request.FILES['file']
+            request.session['name'] = uploaded_file.name.split(".")[0]
+            reader = pdftotext.PDF(uploaded_file)
+            print(len(reader))
+            summary = ""
+            for page in reader:
+                text = page
+                # 1 Create the word frequency table
+                freq_table = _create_frequency_table(text)
+
+                '''
+                We already have a sentence tokenizer, so we just need 
+                to run the sent_tokenize() method to create the array of sentences.
+                '''
+
+                # 2 Tokenize the sentences
+                sentences = sent_tokenize(text)
+
+                # 3 Important Algorithm: score the sentences
+                sentence_scores = _score_sentences(sentences, freq_table)
+
+                # 4 Find the threshold
+                threshold = _find_average_score(sentence_scores)
+
+                # 5 Important Algorithm: Generate the summary
+                summary += _generate_summary(sentences, sentence_scores, 1.0 * threshold)
+            print(summary)
+            rdata = {"summary":summary}
+            return(JsonResponse(rdata))
+    else:
+        return(render(request,"ml/summ/index.html"))
+

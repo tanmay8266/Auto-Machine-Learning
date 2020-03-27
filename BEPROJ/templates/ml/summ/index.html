@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="{%static 'assets/bootstrap/css/bootstrap1.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="{%static 'assets/fonts/fontawesome5-overrides.min.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Acme">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.css">
+        <!--MDbootstrap CSS CDN-->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/css/mdb.min.css" rel="stylesheet">
+
+        <!-- FontAwesome CSS CDN -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+</head>
+
+<body id="page-top"><a class="menu-toggle rounded" href="#"><i class="fa fa-bars"></i></a>
+    <nav class="navbar navbar-light navbar-expand" id="sidebar-wrapper">
+        <div class="container"><button data-toggle="collapse" class="navbar-toggler d-none" data-target="#"></button>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav sidebar-nav" id="sidebar-nav">
+                    <li class="nav-item sidebar-brand" role="presentation"><a class="nav-link active js-scroll-trigger" href="#page-top">Researchera</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="/home/">Home</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#services">Services</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#portfolio">Portfolio</a></li>
+                    <li class="nav-item sidebar-nav-item" role="presentation"><a class="nav-link js-scroll-trigger" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="d-flex masthead" style="background:linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),url('{%static 'assets/img/portfolio-1.jpg' %}');">
+        <div class="container my-auto text-center" style="padding-bottom: 0px;">
+            <h1 class="text-center mb-1" style="color:aliceblue;font-family: 'Source Sans Pro', sans-serif;"><b>Document Summarization<i class="fa fa-magic wobble animated"></i></b></h1>
+            <h1 class="text-center" style="color: aliceblue;"><i class="fab fa-pied-piper-hat bounce animated infinite"></i></h1>
+            <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Drag and Drop your pdf file here!</h5>
+                  <h1 class="text-center"><i class="fas fa-upload"></i></h1>
+                  <form enctype="multipart/form-data" method="POST" >{% csrf_token %}
+                <input type="file" name="file" id= "upload"  style="padding: 40px;margin-top:-100px;padding-top:10%">
+                <input type="text" id="pro_id" name="proj_id" hidden> 
+        </form>
+        <progress></progress>
+        <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm">
+  Launch
+</button>
+
+<!-- Central Modal Small -->
+<div class="modal fade" id="centralModalSm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+
+  <!-- Change class .modal-sm to change the size of the modal -->
+  <div class="modal-dialog modal-lg" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title w-100" id="myModalLabel">Summary</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+                </div>
+              </div>
+        </div>
+    </header>
+    <footer class="footer text-center">
+        <div class="container">
+            <p class="text-muted mb-0 small">Copyright &nbsp;© Researchera 2019</p>
+        </div><a class="js-scroll-trigger scroll-to-top rounded" href="#page-top"><i class="fa fa-angle-up"></i></a></footer>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+    <script src="{%static 'assets/js/stylish-portfolio.js' %}"></script>
+    <script src="{%static 'assets/js/bs-animation.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.1.1/aos.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
+
+    <script>
+        $("#upload").on('change',function(event) { // bCheck is a input type button
+            var fileName = event.target.files[0].name;
+            console.log(fileName);
+            $('#pro_id').val(localStorage.getItem("proj_id"));
+            if(fileName) { // returns true if the string is not empty
+                $.ajax({
+                    // Your server script to process the upload
+                    url: '',
+                    type: 'POST',
+                
+                    // Form data
+                    data: new FormData($('form')[0]) ,
+                
+                    // Tell jQuery not to process data or worry about content-type
+                    // You *must* include these options!
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    
+                    // Custom XMLHttpRequest
+                    xhr: function () {
+                      var myXhr = $.ajaxSettings.xhr();
+                      if (myXhr.upload) {
+                        // For handling the progress of the upload
+                        myXhr.upload.addEventListener('progress', function (e) {
+                          if (e.lengthComputable) {
+                            $('progress').attr({
+                              value: e.loaded,
+                              max: e.total,
+                            });
+                          }
+                        }, false);
+                      }
+                      return myXhr;
+                    },
+                    success:function(data){
+                        console.log(data["summary"])
+                        $('.modal-body').append(data["summary"])
+                                  
+                    }
+                  });
+                  $('#upload').prop("disabled",true)
+            } else { // no file was selected
+                alert("no file selected");
+            }
+            
+        });
+    </script>
+</body>
+</html>
