@@ -30,6 +30,7 @@ from cdqa.utils.converters import pdf_converter
 from ast import literal_eval
 from cdqa.pipeline import QAPipeline
 import joblib
+import gc
 # Create your views here.
 @login_required
 def index(request):
@@ -472,14 +473,16 @@ def indexdq(request):
             # Downloading pre-trained DistilBERT fine-tuned on SQuAD 1.1
             download_model('distilbert-squad_1.1', dir=directory)
 
-
             cdqa_pipeline = QAPipeline(reader='/home/tanmay/Downloads/bert_qa.joblib') # use 'distilbert_qa.joblib' for DistilBERT instead of BERT
             cdqa_pipeline.fit_retriever(df=df)
 
             pkl_filename = '/home/tanmay/Downloads/'+request.session['name']+'query.pkl'
             with open(pkl_filename, 'wb') as file:
                 pickle.dump(cdqa_pipeline, file)
-            
+            cdqa_pipeline = ""
+            uploaded_file = ""
+            df=""
+            gc.collect()
             # joblib.dump(cdqa_pipeline, '/home/tanmay/Downloads/'+request.session['name']+'query.joblib') #did not work 
             # cdqa_pipeline.dump_reader('/home/tanmay/Downloads/'+request.session['name']+'query.joblib') #did not work
             request.session["model_url"] = '/home/tanmay/Downloads/'+request.session['name']+'query.pkl'
@@ -492,6 +495,8 @@ def indexdq(request):
             question = request.POST["question"]
             # cdqa_pipeline = QAPipeline(reader= request.session['model_url'])
             Ans = cdqa_pipeline.predict(question)
+            cdqa_pipeline = ""
+            gc.collect()
             print(Ans)
             rdata = {"one_word":Ans[0],"paragraph":Ans[2]}
             return(JsonResponse(rdata))
