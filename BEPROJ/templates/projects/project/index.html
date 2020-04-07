@@ -130,11 +130,11 @@ z-index: 9999;
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-8">
                   <h1 class="display-5">{{proj.name}}</h1>
                   </div>
-                  <div class="col-6">
-                  <button class="btn peach-gradient relevant " style="position:absolute;right:0">See Relevant Papers</button>
+                  <div class="col-4">
+                  
                 </div>
                   </div>
                   <div class="row">
@@ -142,22 +142,22 @@ z-index: 9999;
                         <h4>{{proj.ini_pitch}}</h4>
                       </div>
                       <div class = "col-sm-4">
-                  <button class="btn blue-gradient mlzone " style="position:absolute;right:0">ML Zone</button>
+                 </div>
+                 </div>
+                 <div class="row">
+                 <div class="col-3">
+                 <button class="btn peach-gradient relevant " style="position:absolute;">See Relevant Papers</button>
+                 </div>
+                 <div class="col-3">
+                  <button class="btn blue-gradient mlzone " style="position:absolute;">ML Zone</button>
+                  </div>
+                  <div class="col-3">
+                  <button class="btn purple-gradient summ " style="position:absolute;">Summarization</button>
+                  </div>
+                  <div class="col-3">
+                  <button class="btn aqua-gradient docquery " style="position:absolute;">Querying</button>
                 </div>
                 </div>
-                <br>
-                <div class="row">
-                      <div class = "col-6" style="word-wrap: break-word;">
-                      </div>
-                      <div class = "col-sm-6">
-                  <button class="btn purple-gradient summ " style="position:absolute;right:0">Summarization</button>
-                </div>
-                </div>
-                <br>   
-        <h5> Progress</h5>
-        <div class="progress md-progress" style="height: 20px">
-    <div class="progress-bar" role="progressbar" style="width: 25%; height: 20px" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
-</div>
 </div>
 </div>
 <form  method="POST" enctype="multipart/form-data">
@@ -254,6 +254,9 @@ Upload a file: <input type="file" name="document" id= "upload" name="file" requi
         });
         $('.summ').on('click',function(){
             window.location.href = "/mlzone/summarization"
+        });
+        $('.docquery').on('click',function(){
+            window.location.href = "/mlzone/docquery"
         });
         $(function(){
             // PAGE IS FULLY LOADED  

@@ -165,7 +165,7 @@
     <div class="card">
                     <span class="badge cyan card-title"><i class="fas fa-drafting-compass fa-2x"></i><h4>Graph Plots (Beta Mode)</h4></span>
                     <div class="card-body dataselect">
-                        <form method="POST" id="post-form">
+                        <form method="POST" id="post-form1">
                                     {% csrf_token %}
                         <div class="row">
                             <div class="col text-center">
@@ -274,6 +274,7 @@
                         $('.datacol').append(data["col"])
                         $('.datarow').append(data['row'])
                         $('.datacolumns').append(data["columns"])
+                        if(data['sufficient']=="True"){
                         $('.tbd').show();
                         $('.gr').hide()
                         $('html,body').animate(
@@ -294,6 +295,10 @@
                             $('.select-2').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                             $('.select-3').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                         }          
+                    }
+                    else{
+                        alert("Please get more data (rows should be more than 50)");
+                    }
                     }
                   });
                   $('#upload').prop("disabled",true)
@@ -336,12 +341,51 @@
                     $(".model").show()
                     $('.gr_cl').show()
                     $("#clean_download").attr("href",data["clean_url"])
+                    var label_mapping = data["data_mapping"]
+                    var bins = data["bins"]
+
                     alert(data["result"])
                     arrayList = JSON.parse(data["columns"])
                         for (var i = 0; i < arrayList.length; i++) {
                             $('.select-4').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                             $('.select-5').append('<option value="' + arrayList[i] + '">' + arrayList[i] + '</option>');
                         }
+                    var keys = Object.keys(label_mapping);
+                    $(".model").append(`<div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Mapping</h4></span>
+                        <div class="card-body mapping">
+                        
+                        </div>`)
+                    for (var i = 0; i<keys.length;i++){
+                    var key1 = Object.keys(label_mapping[keys[i]])
+                    $(".mapping").append(`<div class="card">
+                                        <div class="card-body ${keys[i]}">
+                                        <h5 class="card-title">${keys[i]}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">In the column ${keys[i]}, mappings are as follows: </h6>
+                                        </div>
+                                        </div>`);
+                    for (var j = 0; j<key1.length;j++){
+                        $(`.${keys[i]}`).append(`<p class="card-text">${key1[j]} : ${label_mapping[keys[i]][key1[j]]}</p>`);
+                    }
+                    }
+                    keys= Object.keys(bins)
+                    for (var i=0 ;i<keys.length;i++){
+                                $(".mapping").append(`<div class="card">
+                                        <div class="card-body ${keys[i]}bin">
+                                        <h5 class="card-title">${keys[i]}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">In the column ${keys[i]}, bins are as follows: </h6>
+                                        </div>
+                                        </div>`);
+                        
+                        arrayList = bins[keys[i]];
+                        len = arrayList.length
+                        for (var j = 0; j<len;j++){
+                            if(j<(len-1)){
+                            $(`.${keys[i]}bin`).append(`<p class="card-text">Bin${j} : [ ${arrayList[j]} --> ${arrayList[j+1]} ]</p>`);
+                            }
+                        }
+                    }
+                    
                 }
             });
         });
@@ -358,18 +402,36 @@
                 success:function(data){
 
                     var columns = JSON.parse(data["columns"])
-                    var val_acc = data["val_acc"]
-                    var train_acc = data["train_acc"]
+                    if("val_acc" in data){
+                        var val_acc = data["val_acc"]
+                        var train_acc = data["train_acc"]
+                        var category = "classification" 
+                    }
+                    else{
+                        var reg_mse = data["reg_mse"]
+                        var category = "regression"
+                    }
                     var model_used = data["model_used"]
                     var url_dict = data["url_dict"]
 
-
+                    if(category == "classification"){
                     alert("Success!!"+"\n"+"train_acc:"+train_acc+"val_acc"+val_acc+"model_used"+model_used);
+                    
                     $(".model").append(`<div class="card">
                     <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Summary of Training</h4></span>
                         <div class="card-body">
                         <br><div class="row" ><div class="col-sm-3"></div><div class="col-sm-6 table-responsive" style="text-align:center;"><table id="tablePreview" class="table table-striped table-hover table-borderless"><thead><tr><th>#</th><th>Model Used</th><th>Training<br>Accuracy</th><th>Validation<br>Accuracy</th></tr></thead><tbody><tr><th scope="row">1</th><td>${model_used}</td><td>${train_acc}</td><td>${val_acc}</td></tr></tbody></table></div><div class="col-sm-3"></div></div><br>
                         </div>`)
+                    }
+                    if(category == "regression"){
+                    alert("Success!!"+"\n"+"MSE : "+reg_mse+"model_used"+model_used);
+                    
+                    $(".model").append(`<div class="card">
+                    <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Summary of Training</h4></span>
+                        <div class="card-body">
+                        <br><div class="row" ><div class="col-sm-3"></div><div class="col-sm-6 table-responsive" style="text-align:center;"><table id="tablePreview" class="table table-striped table-hover table-borderless"><thead><tr><th>#</th><th>Model Used</th><th>MAE<br>Mean Absolute Error</th></tr></thead><tbody><tr><th scope="row">1</th><td>${model_used}</td><td>${reg_mse}</td></tr></tbody></table></div><div class="col-sm-3"></div></div><br>
+                        </div>`)
+                    }
                     var i;
                     $(".model").append(`<div class="card">
                     <span class="badge cyan card-title"><i class="fas fa-cog fa-2x" aria-hidden="true"></i><h4>Predictions</h4><h5>Enter the value to get value of Target Variable</h5></span>
@@ -387,7 +449,7 @@
 
                                                 <div class="view view-cascade overlay">
                                                 <img class="card-img-top" src="${url_dict[columns[i]]}" alt="Card image cap">
-                                                <a href="#!">
+                                                <a href="${url_dict[columns[i]]}">
                                                 <div class="mask rgba-white-slight"></div>
                                                 </a>
                                             </div>
