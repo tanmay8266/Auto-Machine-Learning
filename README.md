@@ -6,6 +6,8 @@
  model training so that user does not have to spend time in cleaning the data.
 
 ## Getting Started
-  
+
+  sudo apt install postgres
   python3 -m pip install -r requirements.txt
-  
+  create a new database called researchera
+  python3 manage.py makemigrations 
