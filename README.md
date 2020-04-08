@@ -45,6 +45,10 @@ Check the installation with the following command:
 python3 manage.py runserver
 
 ```
+## Project Description Video
+
+![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
