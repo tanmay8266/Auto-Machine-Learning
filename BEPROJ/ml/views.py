@@ -16,6 +16,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.linear_model import LogisticRegression
+from sklearn.utils import shuffle
 import re
 from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
@@ -114,6 +115,7 @@ def indexml(request):
                 request.session["target"] = target
                 filename = request.POST["filename"]
                 data = pd.read_csv('media/media/'+filename)
+                data = shuffle(data)
                 print(filename,"read was successful")
                 le = preprocessing.LabelEncoder()
                 for i,j in zip(data.columns,data.isnull().sum()/data.shape[0]>0.50):
@@ -157,7 +159,7 @@ def indexml(request):
                             print(data.shape[0])
                             print(no_uniq/data.shape[0])
 
-                            if(no_uniq/data.shape[0]>0.98):
+                            if(no_uniq/data.shape[0]>0.70):
                                     print("Dropped",str(i))
                                     data = data.drop(str(i),axis=1)
                             else:
@@ -196,11 +198,11 @@ def indexml(request):
                 #Correlation with output variable
                 cor_target = abs(cor[target])
                 #Selecting highly correlated features
-                relevant_features = cor_target[cor_target>0.2]
-                for i in data.columns:
-                    if i not in relevant_features.index:
-                        print(i,"OMITTED")
-                        data = (data.drop(i,axis=1))
+                relevant_features = cor_target[cor_target>0.1]
+                # for i in data.columns:
+                #     if i not in relevant_features.index:
+                #         print(i,"OMITTED")
+                #         data = (data.drop(i,axis=1))
                 data.to_csv(r'media/media/temp_cleaned_'+filename)
                 file = Files(remarks="Auto Cleaned Data",link='media/temp_cleaned_'+filename,date=date.today(),name="clean_"+filename,specifications="",pro_id=request.session['proj_id'],re_id=request.user.id)
                 file.save()
@@ -227,18 +229,19 @@ def indexml(request):
                 survived_train = data[target] 
                 data = data.drop(target,axis=1)
                 train_data,eval_data,labels,eval_labels = train_test_split(data, survived_train, random_state = 0)
-                from sklearn.preprocessing import StandardScaler
-                scaler = StandardScaler()
-                scaler.fit(train_data)
-                train_data = scaler.transform(train_data)
-                eval_data = scaler.transform(eval_data)
+                # from sklearn.preprocessing import StandardScaler
+                # scaler = StandardScaler()
+                # scaler.fit(train_data)
+                # train_data = scaler.transform(train_data)
+                # eval_data = scaler.transform(eval_data)
+                print("LEN",len(train_data),len(eval_data))
                 # train_data = data.values[:600]
                 # labels = survived_train[:600]
                 # eval_data = data.values[600:]
                 # eval_labels = survived_train[600:]
                 if(no_uniq==2):
                     category = "Classification"
-                    model = LogisticRegression(fit_intercept=True)
+                    model = LogisticRegression(class_weight = 'balanced',fit_intercept=True)
                     model.fit(train_data, labels)
                     eval_predictions = model.predict(eval_data)
                     model_used = "Logistic Regression"
