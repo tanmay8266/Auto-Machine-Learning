@@ -47,7 +47,7 @@ python3 manage.py runserver
 ```
 ## Project Description Video
 
-![QR CODE](https://github.com/tanmay8266/Researchera/QR_Code.png)
+![QR CODE](https://github.com/tanmay8266/Researchera/blob/master/QR_Code.png)
 
 ## Contributing
 
