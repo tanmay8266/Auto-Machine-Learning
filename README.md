@@ -6,8 +6,46 @@
  model training so that user does not have to spend time in cleaning the data.
 
 ## Getting Started
+ 
+ These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
-  sudo apt install postgres
-  python3 -m pip install -r requirements.txt
-  create a new database called researchera
-  python3 manage.py makemigrations 
+### Prerequisites
+
+What things you need to install the software and how to install them
+
+```
+ sudo apt install postgres
+ 
+```
+```  
+ python3 -m pip install -r requirements.txt
+ 
+```
+### Installing
+
+A step by step series of examples that tell you how to get a development env running
+
+```
+create a new database called researchera
+
+```
+```  
+python3 manage.py makemigrations
+
+```
+## Running the tests
+
+Check the installation with the following command:
+```
+python3 manage.py runserver
+
+```
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
+
