@@ -51,8 +51,13 @@
                 <input type="text" id="pro_id" name="proj_id" hidden> 
         </form>
         <progress></progress>
+        <div class="text-center overlay">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
         <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm">
+<button type="button" class="btn btn-primary" id="launch-btn" data-toggle="modal" data-target="#centralModalSm">
   Launch
 </button>
 
@@ -97,16 +102,19 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
 
     <script>
+        $(".overlay").hide();
+        $("#launch-btn").attr("disabled", true);
         $("#upload").on('change',function(event) { // bCheck is a input type button
             var fileName = event.target.files[0].name;
             console.log(fileName);
             $('#pro_id').val(localStorage.getItem("proj_id"));
+            $(".overlay").show();
             if(fileName) { // returns true if the string is not empty
                 $.ajax({
                     // Your server script to process the upload
                     url: '',
                     type: 'POST',
-                
+
                     // Form data
                     data: new FormData($('form')[0]) ,
                 
@@ -133,14 +141,17 @@
                       return myXhr;
                     },
                     success:function(data){
-                        console.log(data["summary"])
-                        $('.modal-body').append(data["summary"])
+                        $(".overlay").hide();
+                        console.log(data["summary"]);
+                        $('.modal-body').append(data["summary"]);
+                        $("#launch-btn").attr("disabled", false);
                                   
                     }
                   });
                   $('#upload').prop("disabled",true)
             } else { // no file was selected
                 alert("no file selected");
+                $(".overlay").hide();
             }
             
         });

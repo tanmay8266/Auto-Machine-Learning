@@ -51,7 +51,11 @@
                 <input type="text" id="pro_id" name="proj_id" hidden> 
         </form>
         <progress></progress>
-
+        <div class="text-center overlay">
+  <div class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
         <!-- Material input -->
 
         <div class="input-group input-group-sm mb-3 question" data-toggle="tooltip" title="Enter question you want to ask about the file uploaded above">
@@ -82,9 +86,11 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.10/js/mdb.min.js"></script>
 
     <script>
+        $(".overlay").hide();
         $(".question").hide();
         $('.queinp').keypress(function (e) {
             if (e.which == 13) {
+                $(".overlay").show();
                 $(".answer").empty();
                 var qu = $(".queinp").val();
                 alert(qu);
@@ -102,6 +108,7 @@
                             $(".answer").append("<br>")
                             $(".answer").append("In paragraph : "+data["paragraph"])
                             $(".collapse").collapse();
+                            $(".overlay").hide();
                         },
                         error : function(xhr,errmsg,err) {
                         // provide a bit more info about the error to the console
@@ -114,6 +121,7 @@
             var fileName = event.target.files[0].name;
             console.log(fileName);
             $('#pro_id').val(localStorage.getItem("proj_id"));
+            $(".overlay").show();
             if(fileName) { // returns true if the string is not empty
                 $.ajax({
                     // Your server script to process the upload
@@ -148,10 +156,12 @@
                     success:function(data){
                         alert(data["result"])
                         $(".question").show();
+                        $(".overlay").hide();
                     }
                   });
                   $('#upload').prop("disabled",true)
             } else { // no file was selected
+                $(".overlay").hide();
                 alert("no file selected");
             }
             
